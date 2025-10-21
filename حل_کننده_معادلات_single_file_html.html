@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>حل‌کننده معادلات</title>
+  <style>
+    body{font-family: -apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial; background:#f6f8fb; color:#111; padding:24px}
+    .card{max-width:820px;margin:18px auto;padding:20px;border-radius:12px;background:#fff;box-shadow:0 6px 20px rgba(12,30,60,0.08)}
+    h1{margin:0 0 12px;font-size:20px}
+    label{display:block;margin:12px 0 6px;font-weight:600}
+    input[type=text], select, textarea{width:100%;padding:10px;border:1px solid #dde3ee;border-radius:8px;font-size:15px}
+    button{margin-top:12px;padding:10px 16px;border-radius:10px;border:0;background:#2b6cb0;color:white;font-weight:600;cursor:pointer}
+    pre{background:#0f1724;color:#e6eef8;padding:12px;border-radius:8px;overflow:auto}
+    .row{display:flex;gap:12px}
+    .col{flex:1}
+    .small{font-size:13px;color:#6b7280}
+  </style>
+  <!-- کتابخانه نمادین برای تلاش حل تحلیلی؛ اگر CDN در دسترس باشد از آن استفاده می‌کنیم -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/nerdamer.core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Algebra.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Calculus.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Extra.min.js"></script>
+</head>
+<body>
+  <div class="card">
+    <h1>حل‌کننده معادلات — ساده و سریع</h1>
+    <p class="small">فرمول یا عبارت معادله را وارد کنید. مثال‌ها: <code>x^2 - 2 = 0</code>، <code>sin(x) - 0.5 = 0</code>، <code>2*x+3=7</code>.</p>
+
+    <label for="equation">معادله</label>
+    <input id="equation" type="text" placeholder="مثال: x^2 - 2 = 0" value="x^2-2=0">
+
+    <label for="variable">متغیر (به انگلیسی)</label>
+    <input id="variable" type="text" value="x">
+
+    <div class="row">
+      <div class="col">
+        <label for="range">دامنه جستجو برای عددی (برای توابع)</label>
+        <input id="range" type="text" value="-100,100">
+      </div>
+      <div class="col">
+        <label for="tolerance">ایپسلون (دقت عددی)</label>
+        <input id="tolerance" type="text" value="1e-9">
+      </div>
+    </div>
+
+    <button id="solveBtn">حل کن</button>
+
+    <h3>نتیجه</h3>
+    <pre id="output">هیچ‌ نتیجه‌ای هنوز</pre>
+
+    <details>
+      <summary>توضیحات / روش</summary>
+      <p class="small">اول تلاش می‌کنیم حل تحلیلی با کتابخانه <em>nerdamer</em>. اگر حل تحلیلی پیدا نشود یا معادله عددی باشد، از روش نمونه‌برداری + قطع‌نقطه (bisection) برای پیدا کردن ریشه‌ها در بازه تعیین‌شده استفاده می‌کنیم.</p>
+    </details>
+  </div>
+
+<script>
+  // کمک: تبدیل عبارت معادله a = b -> a - b
+  function normalizeEquation(eq){
+    if(eq.indexOf('=')!==-1){
+      const parts = eq.split('=');
+      return '(' + parts.slice(0,parts.length-1).join('=') + ')-(' + parts[parts.length-1] + ')';
+    }
+    return '('+eq+')';
+  }
+
+  function trySymbolicSolve(expr, variable){
+    if(typeof nerdamer === 'undefined') return null;
+    try{
+      // تلاش با دستور solve
+      if(typeof nerdamer.solve === 'function'){
+        const sol = nerdamer.solve(expr, variable);
+        // nerdamer.solve ممکن است آرایه یا رشته برگرداند
+        return sol;
+      }
+      // fallback: سعی بر استفاده از solveEquations
+      if(typeof nerdamer.solveEquations === 'function'){
+        const arr = nerdamer.solveEquations([expr]);
+        return arr;
+      }
+    }catch(e){
+      console.warn('symbolic failed', e);
+    }
+    return null;
+  }
+
+  // ارزیابی عددی عبارت با مقدار متغیر مشخص
+  function evalNumeric(expr, variable, value){
+    // از nerdamer برای ارزیابی استفاده می‌کنیم اگر هست
+    try{
+      if(typeof nerdamer !== 'undefined'){
+        const replaced = expr.replace(new RegExp('\\b'+variable+'\\b','g'), '(' + value + ')');
+        const v = nerdamer(replaced).evaluate().text();
+        return parseFloat(v);
+      }
+    }catch(e){
+      // ادامه به روش eval امن‌تر
+    }
+    // fallback: با Function (ریسک پایین چون ورودی کاربر)
+    try{
+      // فقط متغیر مشخص را اجازه می‌دهیم
+      const fn = new Function(variable, 'return ('+expr+');');
+      return Number(fn(value));
+    }catch(e){
+      return NaN;
+    }
+  }
+
+  // bisection برای یک بازه
+  function bisectionRoot(expr, variable, a, b, tol, maxIter=60){
+    let fa = evalNumeric(expr, variable, a);
+    let fb = evalNumeric(expr, variable, b);
+    if(isNaN(fa) || isNaN(fb)) return null;
+    if(fa===0) return a;
+    if(fb===0) return b;
+    if(fa*fb>0) return null; // شرط تغییر علامت لازم
+    let lo = a, hi = b, mid, fmid;
+    for(let i=0;i<maxIter;i++){
+      mid = (lo+hi)/2;
+      fmid = evalNumeric(expr, variable, mid);
+      if(Math.abs(fmid) <= tol) return mid;
+      if(fa * fmid <= 0){
+        hi = mid; fb = fmid;
+      }else{
+        lo = mid; fa = fmid;
+      }
+    }
+    return (lo+hi)/2;
+  }
+
+  function numericScanAndSolve(expr, variable, rangeStr, tol){
+    const parts = rangeStr.split(',').map(s=>parseFloat(s.trim()));
+    const a = parts[0]||-100, b = parts[1]||100;
+    const samples = 2000; // نمونه برداری
+    const xs = [];
+    for(let i=0;i<=samples;i++) xs.push(a + (b-a)*i/samples);
+    const values = xs.map(x => evalNumeric(expr, variable, x));
+    const roots = [];
+    for(let i=0;i<samples;i++){
+      const x1 = xs[i], x2 = xs[i+1];
+      const v1 = values[i], v2 = values[i+1];
+      if(isNaN(v1) || isNaN(v2)) continue;
+      if(Math.abs(v1) < tol) roots.push(x1);
+      if(v1 * v2 < 0){
+        const root = bisectionRoot(expr, variable, x1, x2, tol);
+        if(root!==null){
+          // حذف ریشه‌های خیلی نزدیک که تکراری‌اند
+          if(!roots.some(r => Math.abs(r-root) < 1e-7)) roots.push(root);
+        }
+      }
+    }
+    // همچنین بررسی انتهای بازه
+    const last = xs[xs.length-1];
+    if(Math.abs(values[values.length-1]) < tol) roots.push(last);
+    return roots.sort((a,b)=>a-b);
+  }
+
+  document.getElementById('solveBtn').addEventListener('click', ()=>{
+    const eqText = document.getElementById('equation').value.trim();
+    const variable = document.getElementById('variable').value.trim() || 'x';
+    const rangeStr = document.getElementById('range').value.trim();
+    const tol = parseFloat(document.getElementById('tolerance').value) || 1e-9;
+    const out = document.getElementById('output');
+    out.textContent = 'در حال تلاش برای حل...';
+
+    if(!eqText){ out.textContent = 'لطفاً معادله را وارد کنید.'; return; }
+
+    const expr = normalizeEquation(eqText);
+
+    // تلاش تحلیلی ابتدا
+    const sym = trySymbolicSolve(expr, variable);
+    if(sym){
+      try{
+        // سعی می‌کنیم فرمت خروجی را خوانا نشان دهیم
+        let text = '';
+        if(Array.isArray(sym)){
+          if(sym.length===0) text = 'حل نمیشود یا جواب صریح ندارد.';
+          else text = 'جواب(های نمادین):\n' + sym.map(s=>String(s)).join('\n');
+        } else {
+          text = 'جواب نمادین: ' + String(sym);
+        }
+        out.textContent = text;
+        return;
+      }catch(e){
+        console.warn(e);
+      }
+    }
+
+    // اگر نمادین نشد، از حل عددی استفاده کن
+    try{
+      const roots = numericScanAndSolve(expr, variable, rangeStr, tol);
+      if(roots.length===0){
+        out.textContent = 'هیچ ریشه‌ای در بازه مشخص‌شده پیدا نشد.';
+      } else {
+        let t = 'ریشه(ها) عددی:\n';
+        for(let r of roots){
+          t += r + '\n';
+        }
+        out.textContent = t;
+      }
+    }catch(e){
+      out.textContent = 'خطا در حل عددی: ' + e;
+    }
+  });
+</script>
+</body>
+</html>
