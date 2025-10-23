@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>حل‌ کننده معادلات</title>
+  <title>حل‌کننده معادلات</title>
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237b1fa2'/><text x='50%' y='55%' text-anchor='middle' font-size='50' fill='white' font-family='Arial' dy='.3em'>∑</text></svg>">
   <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
   <style>
@@ -100,10 +100,10 @@
 <body>
   <div class="card">
     <h1>حل‌کننده معادلات — ساده و سریع</h1>
-    <p class="small">فرمول یا عبارت معادله را وارد کنید. مثال‌ها: <code>x^2 - 2 = 0</code>، <code>sin(x) - 0.5 = 0</code>، <code>2*x+3=7</code>.</p>
+    <p class="small">فرمول یا عبارت معادله را وارد کنید. مثال‌ها: <code>x^2 - 2 = 0</code>، <code>sin(x) - 0.5 = 0</code>، <code>2x+3=7</code>.</p>
 
     <label for="equation">معادله</label>
-    <input id="equation" type="text" placeholder="مثال: x^2 - 2 = 0" value="x^2-2=0">
+    <input id="equation" type="text" placeholder="مثال: 2x+3=7" value="2x+3=7">
 
     <label for="variable">متغیر (به انگلیسی)</label>
     <input id="variable" type="text" value="x">
@@ -126,17 +126,146 @@
 
     <details>
       <summary>توضیحات / روش</summary>
-      <p class="small">اول تلاش می‌کنیم حل تحلیلی با کتابخانه <em>nerdamer</em>. اگر حل تحلیلی پیدا نشود یا معادله عددی باشد، از روش نمونه‌برداری + قطع‌نقطه (bisection) برای پیدا کردن ریشه‌ها در بازه تعیین‌شده استفاده می‌کنیم.</p>
+      <p class="small">ابتدا تلاش می‌شود حل تحلیلی با کتابخانه <em>nerdamer</em> انجام شود. اگر حل تحلیلی ممکن نبود یا معادله عددی بود، از روش نمونه‌برداری + قطع‌نقطه (bisection) برای پیدا کردن ریشه‌ها استفاده می‌شود.</p>
     </details>
   </div>
+
 <script>
-/* کد JS بدون تغییر */
-  function normalizeEquation(eq){ if(eq.indexOf('=')!==-1){ const parts = eq.split('='); return '(' + parts.slice(0,parts.length-1).join('=') + ')-(' + parts[parts.length-1] + ')'; } return '('+eq+')'; }
-  function trySymbolicSolve(expr, variable){ if(typeof nerdamer==='undefined')return null; try{ if(typeof nerdamer.solve==='function'){ return nerdamer.solve(expr, variable); } if(typeof nerdamer.solveEquations==='function'){ return nerdamer.solveEquations([expr]); } }catch(e){console.warn('symbolic failed',e);} return null; }
-  function evalNumeric(expr, variable, value){ try{ if(typeof nerdamer!=='undefined'){ const replaced=expr.replace(new RegExp('\b'+variable+'\b','g'),'('+value+')'); return parseFloat(nerdamer(replaced).evaluate().text()); } }catch(e){} try{ const fn=new Function(variable,'return ('+expr+');'); return Number(fn(value)); }catch(e){return NaN;} }
-  function bisectionRoot(expr,variable,a,b,tol,maxIter=60){let fa=evalNumeric(expr,variable,a);let fb=evalNumeric(expr,variable,b);if(isNaN(fa)||isNaN(fb))return null;if(fa===0)return a;if(fb===0)return b;if(fa*fb>0)return null;let lo=a,hi=b,mid,fmid;for(let i=0;i<maxIter;i++){mid=(lo+hi)/2;fmid=evalNumeric(expr,variable,mid);if(Math.abs(fmid)<=tol)return mid;if(fa*fmid<=0){hi=mid;fb=fmid;}else{lo=mid;fa=fmid;}}return(lo+hi)/2;}
-  function numericScanAndSolve(expr,variable,rangeStr,tol){const parts=rangeStr.split(',').map(s=>parseFloat(s.trim()));const a=parts[0]||-100,b=parts[1]||100;const samples=2000;const xs=[];for(let i=0;i<=samples;i++)xs.push(a+(b-a)*i/samples);const values=xs.map(x=>evalNumeric(expr,variable,x));const roots=[];for(let i=0;i<samples;i++){const x1=xs[i],x2=xs[i+1];const v1=values[i],v2=values[i+1];if(isNaN(v1)||isNaN(v2))continue;if(Math.abs(v1)<tol)roots.push(x1);if(v1*v2<0){const root=bisectionRoot(expr,variable,x1,x2,tol);if(root!==null){if(!roots.some(r=>Math.abs(r-root)<1e-7))roots.push(root);}}}const last=xs[xs.length-1];if(Math.abs(values[values.length-1])<tol)roots.push(last);return roots.sort((a,b)=>a-b);}
-  document.getElementById('solveBtn').addEventListener('click',()=>{const eqText=document.getElementById('equation').value.trim();const variable=document.getElementById('variable').value.trim()||'x';const rangeStr=document.getElementById('range').value.trim();const tol=parseFloat(document.getElementById('tolerance').value)||1e-9;const out=document.getElementById('output');out.textContent='در حال تلاش برای حل...';if(!eqText){out.textContent='لطفاً معادله را وارد کنید.';return;}const expr=normalizeEquation(eqText);const sym=trySymbolicSolve(expr,variable);if(sym){try{let text='';if(Array.isArray(sym)){if(sym.length===0)text='حل نمیشود یا جواب صریح ندارد.';else text='جواب(های نمادین):\n'+sym.map(s=>String(s)).join('\n');}else{text='جواب نمادین: '+String(sym);}out.textContent=text;return;}catch(e){console.warn(e);}}try{const roots=numericScanAndSolve(expr,variable,rangeStr,tol);if(roots.length===0){out.textContent='هیچ ریشه‌ای در بازه مشخص‌شده پیدا نشد.';}else{let t='ریشه(ها) عددی:\n';for(let r of roots){t+=r+'\n';}out.textContent=t;}}catch(e){out.textContent='خطا در حل عددی: '+e;}});
+  // ✅ تابع جدید برای تشخیص ضرب‌های ضمنی
+  function insertImplicitMultiplication(eq) {
+    // عدد در کنار متغیر یا پرانتز (2x → 2*x)
+    eq = eq.replace(/(\d)([a-zA-Z(])/g, '$1*$2');
+    // متغیر در کنار پرانتز (x(x+1) → x*(x+1))
+    eq = eq.replace(/([a-zA-Z])\(/g, '$1*(');
+    // پرانتز بسته در کنار متغیر یا عدد ()(x) → )*(x)
+    eq = eq.replace(/\)(\s*)(\d|[a-zA-Z(])/g, ')*$1$2');
+    return eq;
+  }
+
+  function normalizeEquation(eq){ 
+    if(eq.indexOf('=')!==-1){ 
+      const parts = eq.split('='); 
+      return '(' + parts.slice(0,parts.length-1).join('=') + ')-(' + parts[parts.length-1] + ')'; 
+    } 
+    return '('+eq+')'; 
+  }
+
+  function trySymbolicSolve(expr, variable){ 
+    if(typeof nerdamer==='undefined')return null; 
+    try{ 
+      if(typeof nerdamer.solve==='function'){ 
+        return nerdamer.solve(expr, variable); 
+      } 
+      if(typeof nerdamer.solveEquations==='function'){ 
+        return nerdamer.solveEquations([expr]); 
+      } 
+    }catch(e){console.warn('symbolic failed',e);} 
+    return null; 
+  }
+
+  function evalNumeric(expr, variable, value){ 
+    try{ 
+      if(typeof nerdamer!=='undefined'){ 
+        const replaced=expr.replace(new RegExp('\\b'+variable+'\\b','g'),'('+value+')'); 
+        return parseFloat(nerdamer(replaced).evaluate().text()); 
+      } 
+    }catch(e){} 
+    try{ 
+      const fn=new Function(variable,'return ('+expr+');'); 
+      return Number(fn(value)); 
+    }catch(e){return NaN;} 
+  }
+
+  function bisectionRoot(expr,variable,a,b,tol,maxIter=60){
+    let fa=evalNumeric(expr,variable,a);
+    let fb=evalNumeric(expr,variable,b);
+    if(isNaN(fa)||isNaN(fb))return null;
+    if(fa===0)return a;
+    if(fb===0)return b;
+    if(fa*fb>0)return null;
+    let lo=a,hi=b,mid,fmid;
+    for(let i=0;i<maxIter;i++){
+      mid=(lo+hi)/2;
+      fmid=evalNumeric(expr,variable,mid);
+      if(Math.abs(fmid)<=tol)return mid;
+      if(fa*fmid<=0){hi=mid;fb=fmid;}else{lo=mid;fa=fmid;}
+    }
+    return(lo+hi)/2;
+  }
+
+  function numericScanAndSolve(expr,variable,rangeStr,tol){
+    const parts=rangeStr.split(',').map(s=>parseFloat(s.trim()));
+    const a=parts[0]||-100,b=parts[1]||100;
+    const samples=2000;
+    const xs=[];
+    for(let i=0;i<=samples;i++)xs.push(a+(b-a)*i/samples);
+    const values=xs.map(x=>evalNumeric(expr,variable,x));
+    const roots=[];
+    for(let i=0;i<samples;i++){
+      const x1=xs[i],x2=xs[i+1];
+      const v1=values[i],v2=values[i+1];
+      if(isNaN(v1)||isNaN(v2))continue;
+      if(Math.abs(v1)<tol)roots.push(x1);
+      if(v1*v2<0){
+        const root=bisectionRoot(expr,variable,x1,x2,tol);
+        if(root!==null){
+          if(!roots.some(r=>Math.abs(r-root)<1e-7))roots.push(root);
+        }
+      }
+    }
+    const last=xs[xs.length-1];
+    if(Math.abs(values[values.length-1])<tol)roots.push(last);
+    return roots.sort((a,b)=>a-b);
+  }
+
+  document.getElementById('solveBtn').addEventListener('click',()=>{
+    let eqText=document.getElementById('equation').value.trim();
+    eqText = insertImplicitMultiplication(eqText); // 🔧 اضافه شد
+
+    const variable=document.getElementById('variable').value.trim()||'x';
+    const rangeStr=document.getElementById('range').value.trim();
+    const tol=parseFloat(document.getElementById('tolerance').value)||1e-9;
+    const out=document.getElementById('output');
+
+    out.textContent='در حال تلاش برای حل...';
+
+    if(!eqText){
+      out.textContent='لطفاً معادله را وارد کنید.';
+      return;
+    }
+
+    const expr=normalizeEquation(eqText);
+    const sym=trySymbolicSolve(expr,variable);
+
+    if(sym){
+      try{
+        let text='';
+        if(Array.isArray(sym)){
+          if(sym.length===0)
+            text='حل نمیشود یا جواب صریح ندارد.';
+          else
+            text='جواب(های نمادین):\n'+sym.map(s=>String(s)).join('\n');
+        }else{
+          text='جواب نمادین: '+String(sym);
+        }
+        out.textContent=text;
+        return;
+      }catch(e){console.warn(e);}
+    }
+
+    try{
+      const roots=numericScanAndSolve(expr,variable,rangeStr,tol);
+      if(roots.length===0){
+        out.textContent='هیچ ریشه‌ای در بازه مشخص‌شده پیدا نشد.';
+      }else{
+        let t='ریشه(ها) عددی:\n';
+        for(let r of roots){t+=r+'\n';}
+        out.textContent=t;
+      }
+    }catch(e){
+      out.textContent='خطا در حل عددی: '+e;
+    }
+  });
 </script>
 </body>
 </html>
