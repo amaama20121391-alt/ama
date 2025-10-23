@@ -1,203 +1,308 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>AMA Tech — راه‌حل‌های نوین توسعه وب</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>شرکت AMA - راه‌حل‌های نوین توسعه وب</title>
 
-    <!-- SEO و Open Graph -->
-    <meta name="description" content="AMA Tech — توسعه وب با پایتون و HTML. طراحی سایت، اپلیکیشن‌های مقیاس‌پذیر، بهینه‌سازی عملکرد و پشتیبانی ۲۴/۷.">
-    <meta property="og:title" content="AMA Tech | توسعه وب هوشمند">
-    <meta property="og:description" content="راه‌حل‌های نوین توسعه وب با پایتون، HTML و طراحی مدرن.">
-    <meta property="og:type" content="website">
-    <meta property="og:locale" content="fa_IR">
-    <meta property="og:image" content="https://yourdomain.com/preview.jpg">
+  <!-- Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
 
-    <!-- فونت و آیکون -->
-    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Favicon (SVG Inline) -->
+  <link rel="icon" type="image/svg+xml"
+    href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB4Mj0iMSIgeTE9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNTViNmZmIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzJlYThmZiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTIiIGZpbGw9InVybCgjZykiLz4KICA8dGV4dCB4PSI1MCUiIHk9IjU0JSIgZm9udC1mYW1pbHk9IlZhemlybWF0biwgQXJpYWwsIHNhbnMtc2VyaWYiIGZvbnQtd2VpZ2h0PSI5MDAiIGZvbnQtc2l6ZT0iMjgiIGZpbGw9Ii8wMjEwMWEiIHRleHQtYW5jaG9yPSJtaWRkbGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5BTUE8L3RleHQ+Cjwvc3ZnPg==">
+  <meta name="theme-color" content="#121212" />
 
-    <style>
-        :root{
-            --primary-color:#55b6ff;
-            --accent-color:#2ecc71;
-            --bg-900:#0f1115;
-            --text:#e6eef8;
-            --muted:#98a0ad;
-            --card:rgba(255,255,255,0.03);
-            --glass-border:rgba(85,182,255,0.12);
-        }
-        @keyframes background-pan {
-            0%{background-position:0% 0%;}
-            50%{background-position:100% 50%;}
-            100%{background-position:0% 100%;}
-        }
-        body{
-            margin:0;
-            font-family:'Vazirmatn',sans-serif;
-            background:linear-gradient(135deg,#0b0c10 0%,#101225 50%,#0b0c10 100%);
-            background-size:400% 400%;
-            animation:background-pan 60s linear infinite;
-            color:var(--text);
-            direction:rtl;
-        }
-        .container{max-width:1200px;margin:0 auto;padding:0 20px;}
-        header.site-header{
-            position:sticky;top:0;z-index:1000;
-            backdrop-filter:blur(6px);
-            background:rgba(20,20,26,0.7);
-            border-bottom:1px solid rgba(85,182,255,0.06);
-            padding:12px 0;
-        }
-        .nav{display:flex;justify-content:space-between;align-items:center;}
-        .brand{display:flex;align-items:center;gap:12px;}
-        .brand div:first-child{width:44px;height:44px;border-radius:10px;background:linear-gradient(180deg,var(--primary-color),#2ea8ff);display:flex;align-items:center;justify-content:center;font-weight:900;color:#02101a;}
-        nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0;}
-        nav a{text-decoration:none;color:var(--text);font-weight:600;padding:8px 10px;border-radius:8px;transition:0.2s;}
-        nav a:hover{background:rgba(85,182,255,0.06);color:var(--primary-color);}
-        .header-cta{background:linear-gradient(90deg,var(--accent-color),#27b36a);border:none;padding:10px 16px;border-radius:10px;color:#fff;font-weight:700;cursor:pointer;}
-        .hero{padding:70px 0 40px;display:flex;flex-wrap:wrap;gap:30px;align-items:center;}
-        .hero h2{color:var(--primary-color);font-size:2.2rem;margin-bottom:16px;}
-        .cta-button{background:linear-gradient(90deg,var(--primary-color),#2ea8ff);color:#02101a;padding:14px 28px;border:none;border-radius:12px;font-weight:800;cursor:pointer;}
-        .cta-button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
-        .service-card{background:var(--card);padding:24px;border-radius:14px;border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(2,6,23,0.6);transition:0.3s;}
-        .service-card:hover{transform:translateY(-10px);}
-        .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;}
-        .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px;}
-        .project-card{background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);transition:0.25s;display:block;text-decoration:none;}
-        .project-card:hover{transform:translateY(-8px);box-shadow:0 18px 42px rgba(0,0,0,0.6);}
-        .project-meta{display:flex;gap:12px;align-items:center;}
-        .contact-panel{max-width:700px;margin:0 auto;background:rgba(255,255,255,0.02);border:1px solid var(--glass-border);border-radius:14px;padding:26px;}
-        input,textarea{width:100%;padding:12px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:rgba(0,0,0,0.25);color:var(--text);margin-bottom:16px;}
-        .submit-btn{background:linear-gradient(90deg,var(--primary-color),#2ea8ff);border:none;padding:12px 22px;border-radius:10px;font-weight:800;color:#02101a;cursor:pointer;}
-        footer{text-align:center;padding:28px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:40px;}
-        #scrollTopBtn{position:fixed;left:24px;bottom:24px;width:52px;height:52px;border-radius:50%;border:none;background:linear-gradient(90deg,var(--primary-color),#2ea8ff);color:#02101a;font-size:20px;display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(20px);transition:0.25s;}
-        #scrollTopBtn.show{opacity:1;transform:translateY(0);}
-    </style>
+  <style>
+    /* --- CSS for Dark Theme, Vazirmatn, and Animation --- */
+    :root {
+      --primary-color: #55b6ff;
+      --secondary-color: #28a745;
+      --background-dark: #121212;
+      --text-light: #e0e0e0;
+      --card-dark: #1e1e1e;
+      --border-color: #333;
+    }
+
+    @keyframes background-pan {
+      from { background-position: 0% 0%; }
+      to { background-position: 100% 100%; }
+    }
+
+    .fade-in {
+      opacity: 0;
+      transition: opacity 1.5s ease-out;
+    }
+    .fade-in.show {
+      opacity: 1;
+    }
+
+    body {
+      font-family: 'Vazirmatn', Tahoma, sans-serif;
+      direction: rtl;
+      text-align: right;
+      margin: 0;
+      padding: 0;
+      background-color: var(--background-dark);
+      color: var(--text-light);
+      line-height: 1.8;
+      background: linear-gradient(135deg, var(--background-dark), #1a1a2e, var(--background-dark));
+      background-size: 300% 300%;
+      animation: background-pan 60s linear infinite alternate;
+    }
+
+    h1, h2, h3 {
+      font-weight: 700;
+      color: var(--primary-color);
+      text-shadow: 0 0 5px rgba(85, 182, 255, 0.3);
+    }
+
+    section { padding: 80px 30px; }
+
+    header {
+      background-color: rgba(30, 30, 30, 0.95);
+      border-bottom: 3px solid var(--primary-color);
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      flex-wrap: wrap;
+    }
+
+    header h1 {
+      font-size: 2em;
+      margin: 0;
+      color: var(--text-light);
+    }
+
+    header p {
+      color: var(--primary-color);
+      font-weight: 400;
+      margin: 0;
+      font-size: 0.95em;
+    }
+
+    .hero {
+      text-align: center;
+      padding-top: 60px;
+    }
+
+    .hero h2 {
+      font-size: 2.5em;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 1.2em;
+      max-width: 800px;
+      margin: 0 auto 40px auto;
+      color: #b0b0b0;
+      font-weight: 300;
+    }
+
+    .cta-button {
+      background-color: var(--secondary-color);
+      color: white;
+      padding: 15px 40px;
+      text-decoration: none;
+      border-radius: 10px;
+      font-size: 1.2em;
+      font-weight: 700;
+      transition: all 0.3s ease;
+      box-shadow: 0 6px 15px rgba(40, 167, 69, 0.4);
+      display: inline-block;
+      border: none;
+      cursor: pointer;
+    }
+    .cta-button:hover {
+      background-color: #218838;
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(40, 167, 69, 0.6);
+    }
+
+    .services {
+      background-color: var(--card-dark);
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      text-align: center;
+    }
+
+    .services h3 {
+      font-size: 2em;
+      margin-bottom: 40px;
+    }
+
+    .services ul {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 25px;
+    }
+
+    .services ul li {
+      background-color: var(--background-dark);
+      border: 2px solid var(--primary-color);
+      padding: 25px;
+      border-radius: 12px;
+      width: 260px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+      transition: transform 0.3s ease;
+    }
+    .services ul li:hover {
+      transform: translateY(-5px);
+      border-color: var(--secondary-color);
+    }
+
+    .services ul li strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 1.1em;
+      color: var(--primary-color);
+    }
+
+    #contact-form {
+      text-align: center;
+    }
+    #contact-form h2 { color: var(--text-light); }
+
+    #contact-form form {
+      max-width: 550px;
+      margin: 0 auto;
+      background: var(--card-dark);
+      padding: 40px;
+      border-radius: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+      border-top: 5px solid var(--primary-color);
+    }
+
+    #contact-form label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      font-size: 1.1em;
+      color: var(--primary-color);
+      text-align: right;
+    }
+
+    #contact-form input[type="text"],
+    #contact-form input[type="email"],
+    #contact-form textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border-color);
+      border-radius: 5px;
+      background-color: var(--background-dark);
+      color: var(--text-light);
+      transition: border-color 0.3s;
+      font-family: inherit;
+    }
+
+    #contact-form input:focus,
+    #contact-form textarea:focus {
+      border-color: var(--primary-color);
+      outline: none;
+    }
+
+    footer {
+      background-color: var(--background-dark);
+      color: #6c757d;
+      text-align: center;
+      padding: 30px 20px;
+      font-size: 0.9em;
+      border-top: 1px solid var(--border-color);
+    }
+
+    @media (max-width: 768px) {
+      .services ul li { width: 90%; }
+      .hero h2 { font-size: 1.8em; }
+      .hero p { font-size: 1em; }
+      header { flex-direction: column; text-align: center; }
+    }
+  </style>
 </head>
 <body>
-<header class="site-header fade-in">
-    <div class="container nav">
-        <div class="brand">
-            <div>AMA</div>
-            <div>
-                <h1>AMA Tech</h1>
-                <p>توسعه وب — پایتون و HTML</p>
-            </div>
-        </div>
-        <nav class="main-nav">
-            <ul>
-                <li><a href="#top" class="smooth-scroll">خانه</a></li>
-                <li><a href="#services" class="smooth-scroll">خدمات</a></li>
-                <li><a href="#portfolio" class="smooth-scroll">نمونه‌کار</a></li>
-                <li><a href="#contact-form" class="smooth-scroll">تماس</a></li>
-            </ul>
-        </nav>
-        <button class="header-cta smooth-scroll" data-target="#contact-form">مشاوره رایگان</button>
-    </div>
-</header>
 
-<main id="top" class="container">
-    <section class="hero">
-        <div class="hero-left fade-in">
-            <h2 id="typewriter">🚀 آینده کسب‌وکار شما با توسعه وب مقیاس‌پذیر آغاز می‌شود.</h2>
-            <p>تیم تخصصی AMA با تمرکز بر سرعت، امنیت و طراحی کاربرپسند، وب‌سایت‌ها و اپلیکیشن‌هایی قدرتمند برای جذب مشتری و رشد پایدار شما طراحی می‌کند.</p>
-            <div class="cta-row">
-                <a class="cta-button" href="#contact-form">شروع مشاوره فنی رایگان</a>
-                <button class="cta-button secondary" id="scrollToPortfolio">دیدن نمونه‌کارها</button>
-            </div>
-        </div>
-    </section>
+  <header class="fade-in">
+    <h1>AMA Tech</h1>
+    <p>توسعه وب، از ایده تا راه‌اندازی با پایتون و HTML</p>
+  </header>
 
-    <section id="services" class="services fade-in">
-        <h2 style="color:var(--primary-color);">خدمات کلیدی ما</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <i class="fa-solid fa-code"></i>
-                <h3>وب‌سایت‌های سفارشی</h3>
-                <p>طراحی و توسعه اختصاصی بر اساس نیازهای شما.</p>
-            </div>
-            <div class="service-card">
-                <i class="fa-solid fa-server"></i>
-                <h3>ساخت انواع فایل اکسل و ورد</h3>
-                <p>ساخت فایل اکسل برای بهبود فروشگاه شما.</p>
-            </div>
-            <div class="service-card">
-                <i class="fa-solid fa-rocket"></i>
-                <h3>ساخت پوستر تبلیغاتی</h3>
-                <p>با پوستر اختصاصی خود فروشگاهتان را تبلیغ کنید.</p>
-            </div>
-        </div>
-    </section>
+  <section class="hero fade-in">
+    <h2>🚀 آینده کسب‌وکار شما با توسعه وب مقیاس‌پذیر آغاز می‌شود.</h2>
+    <p>تیم متخصص AMA با تمرکز بر <strong>سرعت، امنیت و طراحی کاربرپسند</strong>، وب‌سایت‌ها و اپلیکیشن‌هایی قدرتمند برای جذب مشتری و رشد پایدار شما طراحی می‌کند.</p>
+    <a href="#contact-form" class="cta-button smooth-scroll">مشاوره فنی رایگان را شروع کنید</a>
+  </section>
 
-    <section id="portfolio" class="portfolio fade-in">
-        <h2 style="color:var(--primary-color);">نمونه‌کارهای اخیر</h2>
-        <div class="portfolio-grid">
-            <!-- نمونه‌کار اول با لینک -->
-            <a href="index2.html" class="project-card" tabindex="0" aria-labelledby="p1-title" style="text-decoration:none;">
-                <div class="project-meta">
-                    <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(180deg,var(--primary-color),#2ea8ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#02101a;">E-C</div>
-                    <div>
-                        <h3 id="p1-title" style="margin:0;color:var(--text);">حل کننده تمامی معادلات</h3>
-                        <p style="margin:6px 0 0 0;color:var(--muted);">سایتی با قابلیت حل تمامی معادلات تک متغیره ریاضی</p>
-                    </div>
-                </div>
-            </a>
-            <!-- نمونه‌کار دوم -->
-            <article class="project-card" tabindex="0" aria-labelledby="p2-title">
-                <div class="project-meta">
-                    <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(180deg,var(--accent-color),#24b86a);display:flex;align-items:center;justify-content:center;font-weight:800;color:#02101a;">RZ</div>
-                    <div>
-                        <h3 id="p2-title" style="margin:0;color:var(--text);">رزومه آقای امیرمحمد الهیاری</h3>
-                        <p style="margin:6px 0 0 0;color:var(--muted);">ساخت سایت رزومه حرفه‌ای</p>
-                    </div>
-                </div>
-            </article>
-        </div>
-    </section>
+  <section class="services fade-in">
+    <h3>خدمات کلیدی ما</h3>
+    <ul>
+      <li>
+        <a href="index2.html" style="text-decoration:none; color:inherit;">
+          <strong>وب‌سایت‌های سفارشی</strong>
+          طراحی و توسعه اختصاصی بر اساس نیازهای منحصر به فرد شما.
+        </a>
+      </li>
+      <li><strong>اپلیکیشن‌های مقیاس‌پذیر</strong><br>ساخت پلتفرم‌های تحت وب با بک‌اند پایتون و HTML.</li>
+      <li><strong>بهینه‌سازی عملکرد (SEO & Speed)</strong><br>بالا بردن سرعت سایت و جایگاه در نتایج جستجو.</li>
+      <li><strong>پشتیبانی و نگهداری ۲۴/۷</strong><br>امنیت و عملکرد پایدار سایت شما را تضمین می‌کنیم.</li>
+    </ul>
+  </section>
 
-    <section id="contact-form" class="fade-in">
-        <h2 style="color:var(--primary-color);">✨ با ما تماس بگیرید</h2>
-        <p style="color:var(--muted);">فرم زیر را پر کنید تا در سریع‌ترین زمان با شما تماس بگیریم.</p>
+  <section id="contact-form" class="fade-in">
+    <h2>✨ با ما تماس بگیرید</h2>
+    <p>برای شروع پروژه وب بعدی خود، فرم زیر را پر کنید. تیم ما در کوتاه‌ترین زمان پاسخگو خواهد بود.</p>
 
-        <form class="contact-panel" action="https://formspree.io/f/xblzvnab" method="POST">
-            <label for="name">نام و نام خانوادگی:</label>
-            <input id="name" name="name" type="text" placeholder="نام کامل شما" required>
+    <form action="https://formspree.io/f/xblzvnab" method="POST">
+      <label for="name">نام و نام خانوادگی:</label>
+      <input type="text" id="name" name="name" required placeholder="نام کامل شما">
 
-            <label for="email">ایمیل:</label>
-            <input id="email" name="email" type="email" placeholder="example@domain.com" required>
+      <label for="email">ایمیل:</label>
+      <input type="email" id="email" name="email" required placeholder="example@domain.com">
 
-            <label for="project">توضیح پروژه:</label>
-            <textarea id="project" name="message" rows="5" placeholder="مثلاً: ساخت سایت فروشگاهی با پرداخت آنلاین" required></textarea>
+      <label for="project">توضیح مختصر پروژه:</label>
+      <textarea id="project" name="message" rows="5" required placeholder="مثلاً: 'نیاز به یک وب‌سایت فروشگاهی با قابلیت پرداخت آنلاین دارم.'"></textarea>
 
-            <button type="submit" class="submit-btn">ارسال درخواست</button>
-        </form>
-    </section>
-</main>
+      <button type="submit" class="cta-button">ارسال درخواست</button>
+    </form>
+  </section>
 
-<button id="scrollTopBtn" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
+  <footer class="fade-in">
+    <p>&copy; 2025 شرکت AMA Tech. راه‌حل‌های توسعه وب هوشمند.</p>
+  </footer>
 
-<footer>
-    <p>&copy; 2025 شرکت AMA Tech. تمامی حقوق محفوظ است.</p>
-    <p style="font-size:0.9rem;">hello@amatech.example · +98 912 000 0000</p>
-</footer>
-
-<script>
-document.addEventListener('DOMContentLoaded',()=>{
-    // Smooth scroll
-    document.querySelectorAll('.smooth-scroll').forEach(a=>{
-        a.addEventListener('click',e=>{
-            const target=a.getAttribute('href');
-            if(target.startsWith('#')){e.preventDefault();document.querySelector(target).scrollIntoView({behavior:'smooth'});}
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      document.querySelectorAll('.smooth-scroll').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          document.querySelector(this.getAttribute('href')).scrollIntoView({ behavior: 'smooth' });
         });
+      });
+
+      const fadeInElements = document.querySelectorAll('.fade-in');
+      setTimeout(() => { fadeInElements.forEach(el => el.classList.add('show')); }, 100);
+
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+            obs.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('section').forEach(sec => {
+        sec.classList.add('fade-in');
+        observer.observe(sec);
+      });
     });
-    // Scroll to top
-    const scrollTopBtn=document.getElementById('scrollTopBtn');
-    window.addEventListener('scroll',()=>{window.scrollY>300?scrollTopBtn.classList.add('show'):scrollTopBtn.classList.remove('show');});
-    scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
-    // Typewriter
-    const el=document.getElementById('typewriter');const text=el.textContent.trim();el.textContent='';let i=0;function type(){if(i<=text.length){el.textContent=text.slice(0,i);i++;setTimeout(type,24);} }type();
-});
-</script>
+  </script>
 </body>
 </html>
