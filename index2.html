@@ -1,283 +1,307 @@
 <!doctype html>
 <html lang="fa" dir="rtl">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>حل‌کننده معادلات</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237b1fa2'/><text x='50%' y='55%' text-anchor='middle' font-size='50' fill='white' font-family='Arial' dy='.3em'>∑</text></svg>">
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Vazirmatn', sans-serif;
-      background: linear-gradient(135deg, #e0f7fa, #f3e5f5);
-      color: #111;
-      padding: 24px;
-    }
-    .card {
-      max-width: 820px;
-      margin: 24px auto;
-      padding: 28px;
-      border-radius: 16px;
-      background: #ffffffcc;
-      backdrop-filter: blur(10px);
-      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-5px);
-    }
-    h1 {
-      margin: 0 0 16px;
-      font-size: 26px;
-      color: #4a148c;
-      text-align: center;
-    }
-    label {
-      display: block;
-      margin: 14px 0 6px;
-      font-weight: 600;
-      color: #333;
-    }
-    input[type=text], select, textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      font-size: 16px;
-      transition: border 0.2s;
-    }
-    input[type=text]:focus {
-      border-color: #7b1fa2;
-      outline: none;
-      box-shadow: 0 0 8px rgba(123,31,162,0.2);
-    }
-    button {
-      margin-top: 16px;
-      padding: 12px 20px;
-      border-radius: 12px;
-      border: none;
-      background: #7b1fa2;
-      color: white;
-      font-weight: 700;
-      font-size: 16px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    button:hover {
-      background: #9c27b0;
-    }
-    pre {
-      background: #1a237e;
-      color: #e8eaf6;
-      padding: 16px;
-      border-radius: 10px;
-      overflow-x: auto;
-      font-size: 15px;
-    }
-    .row {
-      display: flex;
-      gap: 14px;
-    }
-    .col {
-      flex: 1;
-    }
-    .small {
-      font-size: 14px;
-      color: #555;
-    }
-    details summary {
-      cursor: pointer;
-      font-weight: 500;
-      color: #7b1fa2;
-      margin-top: 12px;
-    }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/nerdamer.core.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Algebra.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Calculus.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Extra.min.js"></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>حل‌کننده معادلات</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='45' fill='%237b1fa2'/><text x='50%' y='55%' text-anchor='middle' font-size='50' fill='white' font-family='Arial' dy='.3em'>∑</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Vazirmatn', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #f3e5f5);
+      color: #111;
+      padding: 24px;
+    }
+    .card {
+      max-width: 820px;
+      margin: 24px auto;
+      padding: 28px;
+      border-radius: 16px;
+      background: #ffffffcc;
+      backdrop-filter: blur(10px);
+      box-shadow: 0 12px 25px rgba(0,0,0,0.12);
+      transition: transform 0.2s ease;
+    }
+    .card:hover {
+      transform: translateY(-5px);
+    }
+    h1 {
+      margin: 0 0 16px;
+      font-size: 26px;
+      color: #4a148c;
+      text-align: center;
+    }
+    label {
+      display: block;
+      margin: 14px 0 6px;
+      font-weight: 600;
+      color: #333;
+    }
+    input[type=text], select, textarea {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 16px;
+      transition: border 0.2s;
+    }
+    input[type=text]:focus {
+      border-color: #7b1fa2;
+      outline: none;
+      box-shadow: 0 0 8px rgba(123,31,162,0.2);
+    }
+    button {
+      margin-top: 16px;
+      padding: 12px 20px;
+      border-radius: 12px;
+      border: none;
+      background: #7b1fa2;
+      color: white;
+      font-weight: 700;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #9c27b0;
+    }
+    pre {
+      background: #1a237e;
+      color: #e8eaf6;
+      padding: 16px;
+      border-radius: 10px;
+      overflow-x: auto;
+      font-size: 15px;
+    }
+    .row {
+      display: flex;
+      gap: 14px;
+    }
+    .col {
+      flex: 1;
+    }
+    .small {
+      font-size: 14px;
+      color: #555;
+    }
+    details summary {
+      cursor: pointer;
+      font-weight: 500;
+      color: #7b1fa2;
+      margin-top: 12px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/nerdamer.core.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Algebra.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Calculus.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/nerdamer/1.1.11/Extra.min.js"></script>
 </head>
 <body>
-  <div class="card">
-    <h1>حل‌کننده معادلات — ساده و سریع</h1>
-    <p class="small">فرمول یا عبارت معادله را وارد کنید. مثال‌ها: <code>x^2 - 2 = 0</code>، <code>sin(x) - 0.5 = 0</code>، <code>2x+3=7</code>.</p>
+  <div class="card">
+    <h1>حل‌کننده معادلات — ساده و سریع</h1>
+    <p class="small">فرمول یا عبارت معادله را وارد کنید. مثال‌ها: <code>x^2 - 2 = 0</code>، <code>sin(x) - 0.5 = 0</code>، <code>2x+3=7</code>.</p>
 
-    <label for="equation">معادله</label>
-    <input id="equation" type="text" placeholder="مثال: 2x+3=7" value="2x+3=7">
+    <label for="equation">معادله</label>
+    <input id="equation" type="text" placeholder="مثال: 2x+3=7" value="2x+3=7">
 
-    <label for="variable">متغیر (به انگلیسی)</label>
-    <input id="variable" type="text" value="x">
+    <label for="variable">متغیر (به انگلیسی)</label>
+    <input id="variable" type="text" value="x">
 
-    <div class="row">
-      <div class="col">
-        <label for="range">دامنه جستجو برای عددی (برای توابع)</label>
-        <input id="range" type="text" value="-100,100">
-      </div>
-      <div class="col">
-        <label for="tolerance">ایپسلون (دقت عددی)</label>
-        <input id="tolerance" type="text" value="1e-9">
-      </div>
-    </div>
+    <div class="row">
+      <div class="col">
+        <label for="range">دامنه جستجو برای عددی (برای توابع)</label>
+        <input id="range" type="text" value="-100,100">
+      </div>
+      <div class="col">
+        <label for="tolerance">ایپسلون (دقت عددی)</label>
+        <input id="tolerance" type="text" value="1e-9">
+      </div>
+    </div>
 
-    <button id="solveBtn">حل کن</button>
+    <button id="solveBtn">حل کن</button>
 
-    <h3>نتیجه</h3>
-    <pre id="output">هیچ‌ نتیجه‌ای هنوز</pre>
+    <h3>نتیجه</h3>
+    <pre id="output">هیچ‌ نتیجه‌ای هنوز</pre>
 
-    <details>
-      <summary>توضیحات / روش</summary>
-      <p class="small">ابتدا تلاش می‌شود حل تحلیلی با کتابخانه <em>nerdamer</em> انجام شود. اگر حل تحلیلی ممکن نبود یا معادله عددی بود، از روش نمونه‌برداری + قطع‌نقطه (bisection) برای پیدا کردن ریشه‌ها استفاده می‌شود.</p>
-    </details>
-  </div>
+    <details>
+      <summary>توضیحات / روش</summary>
+      <p class="small">ابتدا تلاش می‌شود حل تحلیلی با کتابخانه <em>nerdamer</em> انجام شود. اگر حل تحلیلی ممکن نبود یا معادله عددی بود، از روش نمونه‌برداری + قطع‌نقطه (bisection) برای پیدا کردن ریشه‌ها استفاده می‌شود.</p>
+    </details>
+  </div>
 
 <script>
-  // ✅ تابع تشخیص و افزودن ضرب‌های ضمنی (شامل بین پرانتزها)
-  function insertImplicitMultiplication(eq) {
-    // 1. عدد در کنار متغیر یا پرانتز (2x → 2*x)
-    eq = eq.replace(/(\d)([a-zA-Z(])/g, '$1*$2');
-    // 2. متغیر در کنار پرانتز (x(x+1) → x*(x+1))
-    eq = eq.replace(/([a-zA-Z])\(/g, '$1*(');
-    // 3. پرانتز بسته در کنار پرانتز باز ()(x) → )*(x) 
-    eq = eq.replace(/\)(\s*)\(/g, ')*$1(');
-    // 4. پرانتز بسته در کنار متغیر یا عدد ()(x) → )*(x) 
-    eq = eq.replace(/\)(\s*)(\d|[a-zA-Z(])/g, ')*$1$2');
-    
-    return eq;
-  }
+  function insertImplicitMultiplication(eq) {
+    eq = eq.replace(/(\d)([a-zA-Z(])/g, '$1*$2');
+    eq = eq.replace(/([a-zA-Z])\(/g, '$1*(');
+    eq = eq.replace(/\)(\s*)(\d|[a-zA-Z(])/g, ')*$1$2');
+    return eq;
+  }
 
-  function normalizeEquation(eq){ 
-    if(eq.indexOf('=')!==-1){ 
-      const parts = eq.split('='); 
-      return '(' + parts.slice(0,parts.length-1).join('=') + ')-(' + parts[parts.length-1] + ')'; 
-    } 
-    return '('+eq+')'; 
-  }
+  function normalizeEquation(eq){ 
+    if(eq.indexOf('=')!==-1){ 
+      const parts = eq.split('='); 
+      return '(' + parts.slice(0,parts.length-1).join('=') + ')-(' + parts[parts.length-1] + ')'; 
+    } 
+    return '('+eq+')'; 
+  }
 
-  function trySymbolicSolve(expr, variable){ 
-    if(typeof nerdamer==='undefined')return null; 
-    try{ 
-      if(typeof nerdamer.solve==='function'){ 
-        return nerdamer.solve(expr, variable); 
-      } 
-      if(typeof nerdamer.solveEquations==='function'){ 
-        return nerdamer.solveEquations([expr]); 
-      } 
-    }catch(e){console.warn('symbolic failed',e);} 
-    return null; 
-  }
+  function trySymbolicSolve(expr, variable){ 
+    if(typeof nerdamer==='undefined')return null; 
+    try{ 
+      if(typeof nerdamer.solve==='function'){ 
+        return nerdamer.solve(expr, variable); 
+      } 
+      if(typeof nerdamer.solveEquations==='function'){ 
+        return nerdamer.solveEquations([expr]); 
+      } 
+    }catch(e){console.warn('symbolic failed',e);} 
+    return null; 
+  }
 
-  function evalNumeric(expr, variable, value){ 
-    try{ 
-      if(typeof nerdamer!=='undefined'){ 
-        const replaced=expr.replace(new RegExp('\\b'+variable+'\\b','g'),'('+value+')'); 
-        return parseFloat(nerdamer(replaced).evaluate().text()); 
-      } 
-    }catch(e){} 
-    try{ 
-      const fn=new Function(variable,'return ('+expr+');'); 
-      return Number(fn(value)); 
-    }catch(e){return NaN;} 
-  }
+  function evalNumeric(expr, variable, value){ 
+    try{ 
+      if(typeof nerdamer!=='undefined'){ 
+        const replaced=expr.replace(new RegExp('\\b'+variable+'\\b','g'),'('+value+')'); 
+        return parseFloat(nerdamer(replaced).evaluate().text()); 
+      } 
+    }catch(e){} 
+    try{ 
+      const fn=new Function(variable,'return ('+expr+');'); 
+      return Number(fn(value)); 
+    }catch(e){return NaN;} 
+  }
 
-  function bisectionRoot(expr,variable,a,b,tol,maxIter=60){
-    let fa=evalNumeric(expr,variable,a);
-    let fb=evalNumeric(expr,variable,b);
-    if(isNaN(fa)||isNaN(fb))return null;
-    if(fa===0)return a;
-    if(fb===0)return b;
-    if(fa*fb>0)return null;
-    let lo=a,hi=b,mid,fmid;
-    for(let i=0;i<maxIter;i++){
-      mid=(lo+hi)/2;
-      fmid=evalNumeric(expr,variable,mid);
-      if(Math.abs(fmid)<=tol)return mid;
-      if(fa*fmid<=0){hi=mid;fb=fmid;}else{lo=mid;fa=fmid;}
-    }
-    return(lo+hi)/2;
-  }
+  function bisectionRoot(expr,variable,a,b,tol,maxIter=60){
+    let fa=evalNumeric(expr,variable,a);
+    let fb=evalNumeric(expr,variable,b);
+    if(isNaN(fa)||isNaN(fb))return null;
+    if(fa===0)return a;
+    if(fb===0)return b;
+    if(fa*fb>0)return null;
+    let lo=a,hi=b,mid,fmid;
+    for(let i=0;i<maxIter;i++){
+      mid=(lo+hi)/2;
+      fmid=evalNumeric(expr,variable,mid);
+      if(Math.abs(fmid)<=tol)return mid;
+      if(fa*fmid<=0){hi=mid;fb=fmid;}else{lo=mid;fa=fmid;}
+    }
+    return(lo+hi)/2;
+  }
 
-  function numericScanAndSolve(expr,variable,rangeStr,tol){
-    const parts=rangeStr.split(',').map(s=>parseFloat(s.trim()));
-    const a=parts[0]||-100,b=parts[1]||100;
-    const samples=2000;
-    const xs=[];
-    for(let i=0;i<=samples;i++)xs.push(a+(b-a)*i/samples);
-    const values=xs.map(x=>evalNumeric(expr,variable,x));
-    const roots=[];
-    for(let i=0;i<samples;i++){
-      const x1=xs[i],x2=xs[i+1];
-      const v1=values[i],v2=values[i+1];
-      if(isNaN(v1)||isNaN(v2))continue;
-      if(Math.abs(v1)<tol)roots.push(x1);
-      if(v1*v2<0){
-        const root=bisectionRoot(expr,variable,x1,x2,tol);
-        if(root!==null){
-          if(!roots.some(r=>Math.abs(r-root)<1e-7))roots.push(root);
-        }
-      }
-    }
-    const last=xs[xs.length-1];
-    if(Math.abs(values[values.length-1])<tol)roots.push(last);
-    return roots.sort((a,b)=>a-b);
-  }
+  function numericScanAndSolve(expr,variable,rangeStr,tol){
+    const parts=rangeStr.split(',').map(s=>parseFloat(s.trim()));
+    const a=parts[0]||-100,b=parts[1]||100;
+    const samples=2000;
+    const xs=[];
+    for(let i=0;i<=samples;i++)xs.push(a+(b-a)*i/samples);
+    const values=xs.map(x=>evalNumeric(expr,variable,x));
+    const roots=[];
+    for(let i=0;i<samples;i++){
+      const x1=xs[i],x2=xs[i+1];
+      const v1=values[i],v2=values[i+1];
+      if(isNaN(v1)||isNaN(v2))continue;
+      if(Math.abs(v1)<tol)roots.push(x1);
+      if(v1*v2<0){
+        const root=bisectionRoot(expr,variable,x1,x2,tol);
+        if(root!==null){
+          if(!roots.some(r=>Math.abs(r-root)<1e-7))roots.push(root);
+        }
+      }
+    }
+    const last=xs[xs.length-1];
+    if(Math.abs(values[values.length-1])<tol)roots.push(last);
+    return roots.sort((a,b)=>a-b);
+  }
 
-  document.getElementById('solveBtn').addEventListener('click',()=>{
-    let eqText=document.getElementById('equation').value.trim();
-    
-    const out=document.getElementById('output');
-    
-    // 🛑 شرط اختصاصی برای نمایش نام سازنده 
-    if (eqText === '2012+1391') {
-      out.textContent = '✨ سازنده: امیر محمد الهیاری\nتاریخ ساخت: مهر ۱۴۰۴';
-      return; // جلوگیری از اجرای ادامه کد حل معادله
-    }
-    // 🛑 پایان شرط اختصاصی
+  document.getElementById('solveBtn').addEventListener('click',()=>{
+    let eqText=document.getElementById('equation').value.trim();
+    eqText = insertImplicitMultiplication(eqText);
 
-    eqText = insertImplicitMultiplication(eqText); 
+    // ✅ اگر عبارت خاص "2012+1391" وارد شود، پیام سازنده را نشان بده
+    if(eqText.replace(/\s+/g,'') === '2012+1391'){
+      const win = window.open('', '_blank');
+      win.document.write(`
+        <html lang="fa" dir="rtl">
+        <head>
+          <meta charset="utf-8">
+          <title>درباره سازنده</title>
+          <style>
+            body {
+              font-family: 'Vazirmatn', sans-serif;
+              background: linear-gradient(135deg, #ede7f6, #e1bee7);
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              height: 100vh;
+              text-align: center;
+              color: #4a148c;
+            }
+            h1 {
+              font-size: 28px;
+              margin-bottom: 10px;
+            }
+            p {
+              font-size: 18px;
+              color: #6a1b9a;
+            }
+          </style>
+        </head>
+        <body>
+          <div>
+            <h1>سازنده: امیرمحمد الهیاری</h1>
+            <p>مهر ۱۴۰۴</p>
+          </div>
+        </body>
+        </html>
+      `);
+      return;
+    }
 
-    const variable=document.getElementById('variable').value.trim()||'x';
-    const rangeStr=document.getElementById('range').value.trim();
-    const tol=parseFloat(document.getElementById('tolerance').value)||1e-9;
-    
-    out.textContent='در حال تلاش برای حل...';
+    const variable=document.getElementById('variable').value.trim()||'x';
+    const rangeStr=document.getElementById('range').value.trim();
+    const tol=parseFloat(document.getElementById('tolerance').value)||1e-9;
+    const out=document.getElementById('output');
 
-    if(!eqText){
-      out.textContent='لطفاً معادله را وارد کنید.';
-      return;
-    }
+    out.textContent='در حال تلاش برای حل...';
 
-    const expr=normalizeEquation(eqText);
-    const sym=trySymbolicSolve(expr,variable);
+    if(!eqText){
+      out.textContent='لطفاً معادله را وارد کنید.';
+      return;
+    }
 
-    if(sym){
-      try{
-        let text='';
-        if(Array.isArray(sym)){
-          if(sym.length===0)
-            text='حل نمیشود یا جواب صریح ندارد.';
-          else
-            text='جواب(های نمادین):\n'+sym.map(s=>String(s)).join('\n');
-        }else{
-          text='جواب نمادین: '+String(sym);
-        }
-        out.textContent=text;
-        return;
-      }catch(e){console.warn(e);}
-    }
+    const expr=normalizeEquation(eqText);
+    const sym=trySymbolicSolve(expr,variable);
 
-    try{
-      const roots=numericScanAndSolve(expr,variable,rangeStr,tol);
-      if(roots.length===0){
-        out.textContent='هیچ ریشه‌ای در بازه مشخص‌شده پیدا نشد.';
-      }else{
-        let t='ریشه(ها) عددی:\n';
-        for(let r of roots){t+=r+'\n';}
-        out.textContent=t;
-      }
-    }catch(e){
-      out.textContent='خطا در حل عددی: '+e;
-    }
-  });
+    if(sym){
+      try{
+        let text='';
+        if(Array.isArray(sym)){
+          if(sym.length===0)
+            text='حل نمیشود یا جواب صریح ندارد.';
+          else
+            text='جواب(های نمادین):\n'+sym.map(s=>String(s)).join('\n');
+        }else{
+          text='جواب نمادین: '+String(sym);
+        }
+        out.textContent=text;
+        return;
+      }catch(e){console.warn(e);}
+    }
+
+    try{
+      const roots=numericScanAndSolve(expr,variable,rangeStr,tol);
+      if(roots.length===0){
+        out.textContent='هیچ ریشه‌ای در بازه مشخص‌شده پیدا نشد.';
+      }else{
+        let t='ریشه(ها) عددی:\n';
+        for(let r of roots){t+=r+'\n';}
+        out.textContent=t;
+      }
+    }catch(e){
+      out.textContent='خطا در حل عددی: '+e;
+    }
+  });
 </script>
 </body>
 </html>
