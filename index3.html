@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>چت عمومی (محلی) — بدون سرور</title>
+  <style>
+    :root{--bg:#0b1220;--card:#0f1724;--accent:#60a5fa;--muted:#9aa9bd}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:IRANSans,system-ui,Segoe UI,Arial;color:#e6eef8;background:linear-gradient(180deg,#071022,#041323)}
+    .wrap{max-width:900px;margin:28px auto;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 300px;gap:0;box-shadow:0 10px 40px rgba(2,6,23,0.6)}
+    main{background:var(--card);padding:18px;display:flex;flex-direction:column;min-height:520px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    header h1{font-size:18px;margin:0}
+    #status{margin-left:auto;font-size:13px;color:var(--muted)}
+    .messages{flex:1;overflow:auto;padding-right:8px}
+    .msg{margin:8px 0;padding:10px;border-radius:10px;display:inline-block;max-width:78%}
+    .msg .who{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .msg.me{background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.05));align-self:flex-end}
+    .msg.other{background:rgba(255,255,255,0.03)}
+    .composer{display:flex;gap:8px;padding-top:12px}
+    input[type=text].compose{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+    button{background:var(--accent);border:none;color:#05203a;padding:10px 14px;border-radius:10px;cursor:pointer}
+    aside{background:linear-gradient(180deg,#071022,#0b1220);padding:18px;border-left:1px solid rgba(255,255,255,0.03)}
+    .panel{display:flex;flex-direction:column;gap:12px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:10px}
+    .small{font-size:13px;color:var(--muted)}
+    .user-list{max-height:240px;overflow:auto}
+    .user{padding:8px;border-radius:8px;background:rgba(255,255,255,0.02);margin-bottom:6px}
+    .tools{display:flex;flex-direction:column;gap:8px}
+    .mono{font-family:ui-monospace,monospace;font-size:13px}
+    /* modal */
+    .modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(2,6,23,0.6)}
+    .modal .box{background:var(--card);padding:18px;border-radius:12px;min-width:320px}
+    .muted{color:var(--muted)}
+    footer{font-size:13px;color:var(--muted);margin-top:8px}
+    @media (max-width:800px){.wrap{grid-template-columns:1fr;padding:8px}.aside-hidden{display:none}}
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <main>
+      <header>
+        <h1>چت عمومی — نسخهٔ محلی</h1>
+        <div id="status">آفلاین محلی</div>
+      </header>
+
+      <div class="messages" id="messages" aria-live="polite"></div>
+
+      <div class="composer">
+        <input id="inputMsg" class="compose" type="text" placeholder="پیام خود را بنویسید..." autocomplete="off" />
+        <button id="btnSend">ارسال</button>
+      </div>
+
+      <footer>
+        پیام‌ها در مرورگر شما ذخیره می‌شوند. برای به اشتراک‎گذاری، از دکمهٔ «صادرات» استفاده کنید.
+      </footer>
+    </main>
+
+    <aside>
+      <div class="panel">
+        <div class="card">
+          <div class="small">نام شما</div>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <input id="nick" type="text" placeholder="نام (مهمان)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit" />
+            <button id="btnSet">ثبت</button>
+          </div>
+          <div class="small" style="margin-top:8px">پس از ثبت، پیام‌ها با نام شما نمایش داده می‌شوند.</div>
+        </div>
+
+        <div class="card">
+          <div class="small">افراد (محلی)</div>
+          <div class="user-list" id="users"></div>
+          <div class="small muted" style="margin-top:8px">در این نسخه افراد فقط در همین مرورگر/تب دیده می‌شوند. اگر چند تبِ همین فایل باز داشته باشید، همگام‌سازی سعی می‌شود برقرار شود.</div>
+        </div>
+
+        <div class="card tools">
+          <button id="btnExport">صادرات پیام‌ها (JSON)</button>
+          <label class="mono small">وارد کردن (JSON):</label>
+          <input id="importFile" type="file" accept="application/json" />
+          <button id="btnClear">پاک‌کردن همه پیام‌ها</button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- modal for initial name -->
+  <div class="modal" id="modalName" aria-hidden="false">
+    <div class="box">
+      <h2>نام خود را وارد کنید</h2>
+      <p class="small muted">این نسخه محلی است. از اطلاعات حساس استفاده نکنید.</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <input id="modalNick" type="text" placeholder="نام (مثلاً: علی)" style="flex:1;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit" />
+        <button id="modalOk">شروع</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Local-only public chat (no server)
+    // Storage key
+    const STORAGE_KEY = 'local-public-chat:v1';
+
+    // Elements
+    const messagesEl = document.getElementById('messages');
+    const usersEl = document.getElementById('users');
+    const nickInput = document.getElementById('nick');
+    const btnSet = document.getElementById('btnSet');
+    const inputMsg = document.getElementById('inputMsg');
+    const btnSend = document.getElementById('btnSend');
+    const statusEl = document.getElementById('status');
+    const modal = document.getElementById('modalName');
+    const modalNick = document.getElementById('modalNick');
+    const modalOk = document.getElementById('modalOk');
+    const btnExport = document.getElementById('btnExport');
+    const importFile = document.getElementById('importFile');
+    const btnClear = document.getElementById('btnClear');
+
+    let nick = '';
+    let messages = []; // {id, nick, msg, ts}
+    let localUsers = new Set();
+
+    // Try BroadcastChannel for tab sync, fallback to storage events
+    let bc = null;
+    try { if ('BroadcastChannel' in window) bc = new BroadcastChannel('local-public-chat'); } catch(e) { bc = null; }
+
+    function save() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    }
+    function load() {
+      try{ messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'); }catch(e){ messages = []; }
+    }
+
+    function addMessage(obj, origin='local'){
+      messages.push(obj); save(); renderMessages();
+      // notify other tabs
+      if (bc) bc.postMessage({type:'new-msg', msg: obj}); else localStorage.setItem(STORAGE_KEY+'-signal', Date.now());
+    }
+
+    function renderMessages(){
+      messagesEl.innerHTML = '';
+      messages.forEach(m=>{
+        const d = document.createElement('div'); d.className = 'msg ' + (m.nick===nick ? 'me' : 'other');
+        const who = document.createElement('div'); who.className='who'; who.textContent = m.nick + ' • ' + new Date(m.ts).toLocaleString();
+        const body = document.createElement('div'); body.textContent = m.msg;
+        d.appendChild(who); d.appendChild(body);
+        messagesEl.appendChild(d);
+      });
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+
+    function renderUsers(){
+      usersEl.innerHTML = '';
+      // simple: users seen in last N messages
+      const lastUsers = Array.from(new Set(messages.slice(-200).map(m=>m.nick)));
+      lastUsers.forEach(u=>{
+        const el = document.createElement('div'); el.className='user'; el.textContent = u + (u===nick? ' (شما)' : ''); usersEl.appendChild(el);
+      });
+    }
+
+    // send message
+    btnSend.addEventListener('click', ()=>{
+      const txt = inputMsg.value.trim(); if (!txt) return; 
+      const obj = {id: Date.now() + '-' + Math.random().toString(36).slice(2), nick, msg: txt, ts: Date.now()};
+      addMessage(obj);
+      inputMsg.value = '';
+    });
+    inputMsg.addEventListener('keyup', (e)=>{ if (e.key === 'Enter') btnSend.click(); });
+
+    // set nick
+    function setNick(v){ nick = v || ('مهمان' + Math.floor(Math.random()*900+100)); nickInput.value = nick; modal.style.display = 'none'; statusEl.textContent = 'محلی: ' + nick; renderMessages(); renderUsers(); }
+    btnSet.addEventListener('click', ()=>{ const v = nickInput.value.trim(); if (!v) return alert('نام وارد کنید'); setNick(v); });
+    modalOk.addEventListener('click', ()=>{ const v = modalNick.value.trim(); if (!v) return alert('نام وارد کنید'); setNick(v); });
+    modalNick.addEventListener('keyup', (e)=>{ if (e.key==='Enter') modalOk.click(); });
+
+    // export
+    btnExport.addEventListener('click', ()=>{
+      const blob = new Blob([JSON.stringify(messages, null, 2)], {type:'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = 'local-public-chat-messages.json'; a.click(); URL.revokeObjectURL(url);
+    });
+
+    // import
+    importFile.addEventListener('change', (e)=>{
+      const f = e.target.files[0]; if (!f) return; const reader = new FileReader();
+      reader.onload = ()=>{
+        try{ const arr = JSON.parse(reader.result); if (!Array.isArray(arr)) throw new Error('invalid');
+          // merge (avoid duplicates)
+          const ids = new Set(messages.map(m=>m.id));
+          arr.forEach(m=>{ if (!ids.has(m.id)) messages.push(m); }); save(); renderMessages(); renderUsers();
+        }catch(err){ alert('فایل نامعتبر است'); }
+      };
+      reader.readAsText(f);
+    });
+
+    // clear
+    btnClear.addEventListener('click', ()=>{ if (!confirm('همه پیام‌ها پاک شوند؟')) return; messages = []; save(); renderMessages(); renderUsers(); });
+
+    // sync from other tabs
+    if (bc){
+      bc.onmessage = (ev)=>{
+        if (ev.data && ev.data.type === 'new-msg'){
+          messages.push(ev.data.msg); save(); renderMessages(); renderUsers();
+        }
+      };
+    } else {
+      window.addEventListener('storage', (e)=>{
+        if (e.key === STORAGE_KEY || e.key === STORAGE_KEY+'-signal'){
+          load(); renderMessages(); renderUsers();
+        }
+      });
+    }
+
+    // initial load
+    load(); renderMessages(); renderUsers();
+    // show modal
+    modal.style.display = 'flex';
+
+    // hint: if localStorage is not available (file:// sometimes), advise using a tiny local static server
+    try{ localStorage.setItem('__test','1'); localStorage.removeItem('__test'); }catch(e){
+      alert('توجه: مرورگر شما اجازهٔ ذخیرهٔ localStorage را نمی‌دهد. اگر فایل را با پروتکل file:// باز کردید، بهتر است از یک سرور محلی (مثلاً `npx http-server`) استفاده کنید یا فایل را روی یک هاست محلی قرار دهید.');
+    }
+  </script>
+</body>
+</html>
