@@ -3,9 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>فضای ابری AMA</title>
-  <link rel="icon" type="image/svg+xml" href="Screenshot 2025-11-06 145610.png">
-  
+  <title>فضای ابریAMA</title>
+   <link rel="icon" type="image/svg+xml" href="Screenshot 2025-11-06 145610.png">
   <style>
     :root{--bg:#0b1220;--card:#0f1724;--accent:#60a5fa;--muted:#9aa9bd}
     *{box-sizing:border-box}
@@ -66,17 +65,6 @@
             <button id="btnSet">ثبت</button>
           </div>
         </div>
-
-        <div class="card">
-          <div class="small">افراد محلی</div>
-          <div class="user-list" id="users"></div>
-        </div>
-
-        <div class="card tools">
-          <button id="btnExport">صادرات پیام‌ها (JSON)</button>
-          <input id="importFile" type="file" accept="application/json" />
-          <button id="btnClear">پاک‌کردن همه</button>
-        </div>
       </div>
     </aside>
   </div>
@@ -84,7 +72,6 @@
   <script>
     const STORAGE_KEY = 'local-public-chat:v2';
     const messagesEl = document.getElementById('messages');
-    const usersEl = document.getElementById('users');
     const inputMsg = document.getElementById('inputMsg');
     const btnSend = document.getElementById('btnSend');
     const nickInput = document.getElementById('nick');
@@ -111,14 +98,21 @@
     function render(){
       messagesEl.innerHTML='';
       messages.forEach(m=>{
-        const div=document.createElement('div');div.className='msg '+(m.nick===nick?'me':'other');
-        const who=document.createElement('div');who.className='who';who.textContent=m.nick+' • '+new Date(m.ts).toLocaleString();
+        const div=document.createElement('div');
+        div.className='msg '+(m.nick===nick?'me':'other');
+        const who=document.createElement('div');
+        who.className='who';
+        who.textContent=m.nick+' • '+new Date(m.ts).toLocaleString();
         div.appendChild(who);
         if(m.type==='text'){
-          const body=document.createElement('div');body.textContent=m.msg;div.appendChild(body);
+          const body=document.createElement('div');
+          body.textContent=m.msg;
+          div.appendChild(body);
         } else if(m.type==='file'){
           const link=document.createElement('a');
-          link.href=m.data;link.download=m.name;link.className='file-icon';
+          link.href=m.data;
+          link.download=m.name;
+          link.className='file-icon';
           link.innerHTML=iconForFile(m.name)+' '+m.name;
           div.appendChild(link);
         }
@@ -149,7 +143,11 @@
     };
 
     btnSet.onclick=()=>{
-      const n=nickInput.value.trim();if(!n)return alert('نام وارد کنید');nick=n;localStorage.setItem('nick',nick);render();
+      const n=nickInput.value.trim();
+      if(!n)return alert('نام وارد کنید');
+      nick=n;
+      localStorage.setItem('nick',nick);
+      render();
     };
 
     render();
@@ -157,5 +155,3 @@
   </script>
 </body>
 </html>
-
-
