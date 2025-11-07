@@ -1,323 +1,164 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta http-equiv="Content-Language" content="fa">
-  <title>AMA Tech — راه‌حل‌های نوین توسعه وب</title>
-
-  <!-- SEO -->
-  <meta name="description" content="AMA Tech — توسعه وب با پایتون و HTML. طراحی سایت، اپلیکیشن‌های مقیاس‌پذیر، بهینه‌سازی عملکرد و پشتیبانی ۲۴/۷.">
-  <meta property="og:title" content="AMA Tech | توسعه وب هوشمند">
-  <meta property="og:description" content="راه‌حل‌های نوین توسعه وب با پایتون، HTML و طراحی مدرن.">
-  <meta property="og:type" content="website">
-  <meta property="og:locale" content="fa_IR">
-  <meta property="og:image" content="https://yourdomain.com/preview.jpg">
-  <meta name="theme-color" content="#0b0c10">
-
-  <!-- Fonts & Icons -->
-  <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;700;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AMA Chat - چت محلی</title>
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" href="AMA-cloud.png">
+  <meta name="theme-color" content="#0b1220">
   <style>
-    :root{
-      --primary-color:#55b6ff;
-      --accent-color:#2ecc71;
-      --bg-900:#0b0c10;
-      --text:#e6eef8;
-      --muted:#98a0ad;
-      --card:rgba(255,255,255,0.03);
-      --glass-border:rgba(85,182,255,0.12);
-    }
-    @keyframes background-pan {
-      0%{background-position:0% 0%;}
-      50%{background-position:100% 50%;}
-      100%{background-position:0% 100%;}
-    }
-    *{box-sizing:border-box;}
-    body{
-      margin:0;
-      font-family:'Vazirmatn',sans-serif;
-      background:linear-gradient(135deg,#0b0c10 0%,#101225 50%,#0b0c10 100%);
-      background-size:400% 400%;
-      animation:background-pan 60s linear infinite;
-      color:var(--text);
-      direction:rtl;
-      overflow-x:hidden;
-    }
-    .container{max-width:1200px;margin:0 auto;padding:0 20px;}
-
-    /* Header */
-    header.site-header{
-      position:sticky;top:0;z-index:1000;
-      backdrop-filter:blur(6px);
-      background:rgba(20,20,26,0.7);
-      border-bottom:1px solid rgba(85,182,255,0.06);
-      padding:12px 0;
-    }
-    .nav{display:flex;justify-content:space-between;align-items:center;}
-    .brand{display:flex;align-items:center;gap:12px;}
-    .brand div:first-child{
-      width:44px;height:44px;border-radius:10px;
-      background:linear-gradient(180deg,var(--primary-color),#2ea8ff);
-      display:flex;align-items:center;justify-content:center;
-      font-weight:900;color:#02101a;
-    }
-    nav ul{list-style:none;display:flex;gap:18px;margin:0;padding:0;}
-    nav a{text-decoration:none;color:var(--text);font-weight:600;padding:8px 10px;border-radius:8px;transition:0.2s;}
-    nav a:hover{background:rgba(85,182,255,0.06);color:var(--primary-color);}
-    .header-cta{
-      background:linear-gradient(90deg,var(--accent-color),#27b36a);
-      border:none;padding:10px 16px;border-radius:10px;
-      color:#fff;font-weight:700;cursor:pointer;margin-top:8px;
-    }
-
-    /* Hamburger */
-    .menu-toggle{
-      display:none;
-      background:none;
-      border:none;
-      font-size:1.6rem;
-      color:var(--text);
-      cursor:pointer;
-    }
-    .main-nav{
-      display:flex;
-      align-items:center;
-      gap:20px;
-    }
-    @media(max-width:768px){
-      .main-nav{
-        position:fixed;
-        top:0;right:-100%;
-        width:70%;
-        height:100vh;
-        background:rgba(15,16,20,0.95);
-        flex-direction:column;
-        justify-content:center;
-        align-items:center;
-        gap:30px;
-        transition:0.4s ease;
-      }
-      .main-nav.active{right:0;}
-      .menu-toggle{display:block;}
-      .header-cta{display:none;}
-    }
-
-    /* Hero */
-    .hero{padding:70px 0 40px;display:flex;flex-wrap:wrap;gap:30px;align-items:center;}
-    .hero h2{color:var(--primary-color);font-size:1.8rem;margin-bottom:16px;}
-    .cta-button{
-      background:linear-gradient(90deg,var(--primary-color),#2ea8ff);
-      color:#02101a;padding:14px 28px;border:none;border-radius:12px;
-      font-weight:800;cursor:pointer;display:inline-block;margin:6px 4px;
-    }
-    .cta-button.secondary{background:transparent;border:1px solid rgba(255,255,255,0.06);color:var(--text);}
-
-    /* Cards */
-    .service-card{background:var(--card);padding:24px;border-radius:14px;border:1px solid var(--glass-border);box-shadow:0 10px 30px rgba(2,6,23,0.6);transition:0.3s;text-align:center;}
-    .service-card:hover{transform:translateY(-10px);}
-    .service-card i{font-size:32px;margin-bottom:12px;color:var(--primary-color);}
-    .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:22px;}
-
-    .portfolio-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:18px;}
-    .project-card{
-      background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));
-      padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.02);
-      transition:0.25s;display:block;text-decoration:none;
-    }
-    .project-card:hover{transform:translateY(-8px);box-shadow:0 18px 42px rgba(0,0,0,0.6);}
-    .project-meta{display:flex;gap:12px;align-items:center;}
-
-    /* Contact */
-    .contact-panel{
-      max-width:700px;margin:0 auto;
-      background:rgba(255,255,255,0.02);
-      border:1px solid var(--glass-border);
-      border-radius:14px;padding:26px;
-    }
-    input,textarea{
-      width:100%;padding:12px;border-radius:8px;
-      border:1px solid rgba(255,255,255,0.04);
-      background:rgba(0,0,0,0.25);color:var(--text);
-      margin-bottom:16px;font-size:1rem;
-    }
-    .submit-btn{
-      background:linear-gradient(90deg,var(--primary-color),#2ea8ff);
-      border:none;padding:12px 22px;border-radius:10px;
-      font-weight:800;color:#02101a;cursor:pointer;width:100%;
-    }
-    footer{text-align:center;padding:28px 0;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:40px;}
-    #scrollTopBtn{
-      position:fixed;left:24px;bottom:24px;width:52px;height:52px;
-      border-radius:50%;border:none;
-      background:linear-gradient(90deg,var(--primary-color),#2ea8ff);
-      color:#02101a;font-size:20px;
-      display:flex;align-items:center;justify-content:center;
-      cursor:pointer;opacity:0;transform:translateY(20px);transition:0.25s;
-    }
-    #scrollTopBtn.show{opacity:1;transform:translateY(0);}
-
-    /* Fade-In Animation */
-    .fade-in{opacity:0;transform:translateY(30px);transition:opacity 0.8s ease, transform 0.8s ease;}
-    .fade-in.show{opacity:1;transform:translateY(0);}
+    :root{--bg:#0b1220;--card:#0f1724;--accent:#60a5fa;--muted:#9aa9bd}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:'Vazirmatn',system-ui;color:#e6eef8;background:linear-gradient(180deg,#071022,#041323)}
+    .wrap{max-width:900px;margin:28px auto;border-radius:12px;overflow:hidden;display:grid;grid-template-columns:1fr 300px;gap:0;box-shadow:0 10px 40px rgba(2,6,23,0.6)}
+    main{background:var(--card);padding:18px;display:flex;flex-direction:column;min-height:520px}
+    header{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+    header img{height:36px;width:auto}
+    header h1{font-size:18px;margin:0}
+    #status{margin-left:auto;font-size:13px;color:var(--muted)}
+    .messages{flex:1;overflow:auto;padding-right:8px}
+    .msg{margin:8px 0;padding:10px;border-radius:10px;display:inline-block;max-width:78%}
+    .msg .who{font-size:12px;color:var(--muted);margin-bottom:6px}
+    .msg.me{background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.05));align-self:flex-end}
+    .msg.other{background:rgba(255,255,255,0.03)}
+    .composer{display:flex;gap:8px;padding-top:12px;align-items:center}
+    input[type=text].compose{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+    input[type=file]{display:none}
+    button{background:var(--accent);border:none;color:#05203a;padding:10px 14px;border-radius:10px;cursor:pointer}
+    .file-icon{display:inline-flex;align-items:center;gap:6px;text-decoration:none;color:inherit;background:rgba(255,255,255,0.05);padding:6px 10px;border-radius:8px;}
+    .file-icon:hover{background:rgba(255,255,255,0.08)}
+    aside{background:linear-gradient(180deg,#071022,#0b1220);padding:18px;border-left:1px solid rgba(255,255,255,0.03)}
+    .panel{display:flex;flex-direction:column;gap:12px}
+    .card{background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);padding:12px;border-radius:10px}
+    .small{font-size:13px;color:var(--muted)}
+    footer{font-size:13px;color:var(--muted);margin-top:8px;text-align:center}
+    @media (max-width:800px){.wrap{grid-template-columns:1fr;padding:8px}}
   </style>
 </head>
-
 <body>
-  <header class="site-header fade-in">
-    <div class="container nav">
-      <div class="brand">
-        <div>AMA</div>
-        <div>
-          <h1>AMA Tech</h1>
-          <p>توسعه وب — پایتون و HTML</p>
-        </div>
+  <div class="wrap">
+    <main>
+      <header>
+        <img src="AMA-cloud.png" alt="AMA Logo">
+        <h1>AMA Chat (محلی)</h1>
+        <div id="status">آفلاین محلی</div>
+      </header>
+
+      <div class="messages" id="messages" aria-live="polite"></div>
+
+      <div class="composer">
+        <input id="inputMsg" class="compose" type="text" placeholder="پیام خود را بنویسید..." autocomplete="off" />
+        <label for="fileInput" title="ارسال فایل" style="cursor:pointer;background:rgba(255,255,255,0.1);padding:8px;border-radius:8px;">📎</label>
+        <input id="fileInput" type="file" multiple />
+        <button id="btnSend">ارسال</button>
       </div>
 
-      <button class="menu-toggle" id="menuToggle"><i class="fa-solid fa-bars"></i></button>
+      <footer>💾 همه‌چیز در مرورگر شما ذخیره می‌شود — بدون نیاز به اینترنت</footer>
+    </main>
 
-      <nav class="main-nav" id="mainNav">
-        <ul>
-          <li><a href="#top" class="smooth-scroll">خانه</a></li>
-          <li><a href="#services" class="smooth-scroll">خدمات</a></li>
-          <li><a href="#portfolio" class="smooth-scroll">نمونه‌کار</a></li>
-          <li><a href="#contact-form" class="smooth-scroll">تماس</a></li>
-        </ul>
-      </nav>
-
-      <button class="header-cta smooth-scroll" data-target="#contact-form">مشاوره رایگان</button>
-    </div>
-  </header>
-
-  <main id="top" class="container">
-    <section class="hero fade-in">
-      <h2 id="typewriter">🚀 آینده کسب‌وکار شما با توسعه وب مقیاس‌پذیر آغاز می‌شود.</h2>
-      <p>تیم تخصصی AMA با تمرکز بر سرعت، امنیت و طراحی کاربرپسند، وب‌سایت‌ها و اپلیکیشن‌هایی قدرتمند برای رشد پایدار شما طراحی می‌کند.</p>
-      <div class="cta-row">
-        <a class="cta-button" href="#contact-form">شروع مشاوره فنی رایگان</a>
-        <button class="cta-button secondary" id="scrollToPortfolio">دیدن نمونه‌کارها</button>
-      </div>
-    </section>
-
-    <section id="services" class="services fade-in">
-      <h2 style="color:var(--primary-color);">خدمات کلیدی ما</h2>
-      <div class="services-grid">
-        <div class="service-card">
-          <i class="fa-solid fa-code"></i>
-          <h3>وب‌سایت‌های سفارشی</h3>
-          <p>طراحی و توسعه اختصاصی بر اساس نیازهای شما.</p>
-        </div>
-        <div class="service-card">
-          <i class="fa-solid fa-server"></i>
-          <h3>ساخت فایل‌های کاربردی</h3>
-          <p>ایجاد فایل‌های اکسل، ورد و فرم‌های خودکار برای مدیریت بهتر کسب‌وکار.</p>
-        </div>
-        <div class="service-card">
-          <i class="fa-solid fa-rocket"></i>
-          <h3>طراحی پوستر تبلیغاتی</h3>
-          <p>پوسترهای اختصاصی برای معرفی و افزایش فروش برند شما.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="portfolio" class="portfolio fade-in">
-      <h2 style="color:var(--primary-color);">نمونه‌کارهای اخیر</h2>
-      <div class="portfolio-grid">
-        <a href="index2.html" class="project-card" tabindex="0" aria-labelledby="p1-title">
-          <div class="project-meta">
-            <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(180deg,var(--primary-color),#2ea8ff);display:flex;align-items:center;justify-content:center;font-weight:800;color:#02101a;">E-C</div>
-            <div>
-              <h3 id="p1-title" style="margin:0;color:var(--text);">حل‌کننده معادلات</h3>
-              <p style="margin:6px 0 0 0;color:var(--muted);">سایتی با قابلیت حل معادلات تک‌متغیره ریاضی</p>
-            </div>
+    <aside>
+      <div class="panel">
+        <div class="card">
+          <div class="small">نام شما</div>
+          <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+            <input id="nick" type="text" placeholder="نام (مهمان)" style="flex:1;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit" />
+            <button id="btnSet">ثبت</button>
           </div>
-        </a>
-
-        <a href="https://st.daneshpark.ir/ama/" class="project-card" tabindex="0" aria-labelledby="p2-title">
-          <div class="project-meta">
-            <div style="width:48px;height:48px;border-radius:8px;background:linear-gradient(180deg,var(--accent-color),#24b86a);display:flex;align-items:center;justify-content:center;font-weight:800;color:#02101a;">RZ</div>
-            <div>
-              <h3 id="p2-title" style="margin:0;color:var(--text);">رزومه آقای امیرمحمد الهیاری</h3>
-              <p style="margin:6px 0 0 0;color:var(--muted);">طراحی سایت رزومه حرفه‌ای</p>
-            </div>
-          </div>
-        </a>
+        </div>
       </div>
-    </section>
-
-    <section id="contact-form" class="fade-in">
-      <h2 style="color:var(--primary-color);">✨ با ما تماس بگیرید</h2>
-      <p style="color:var(--muted);">فرم زیر را پر کنید تا در سریع‌ترین زمان با شما تماس بگیریم.</p>
-
-      <form class="contact-panel" action="https://formspree.io/f/xblzvnab" method="POST">
-        <label for="name">نام و نام خانوادگی:</label>
-        <input id="name" name="name" type="text" placeholder="نام کامل شما" required>
-
-        <label for="email">ایمیل:</label>
-        <input id="email" name="email" type="email" placeholder="example@domain.com" required>
-
-        <label for="project">توضیح پروژه:</label>
-        <textarea id="project" name="message" rows="5" placeholder="مثلاً: ساخت سایت فروشگاهی با پرداخت آنلاین" required></textarea>
-
-        <input type="hidden" name="_subject" value="درخواست مشاوره از AMA Tech">
-        <input type="text" name="_gotcha" style="display:none">
-
-        <button type="submit" class="submit-btn">ارسال درخواست</button>
-      </form>
-    </section>
-  </main>
-
-  <button id="scrollTopBtn" aria-label="بازگشت به بالا"><i class="fa-solid fa-arrow-up"></i></button>
-
-  <footer>
-    <p>&copy; 2025 شرکت AMA Tech. تمامی حقوق محفوظ است.</p>
-    <p style="font-size:0.9rem;">ama.ama2012.1391@gmail.com · +98 996 197 0039</p>
-  </footer>
+    </aside>
+  </div>
 
   <script>
-    document.addEventListener('DOMContentLoaded',()=>{
-      // Smooth scroll
-      document.querySelectorAll('.smooth-scroll').forEach(a=>{
-        a.addEventListener('click',e=>{
-          const target=a.getAttribute('href');
-          if(target && target.startsWith('#')){
-            e.preventDefault();
-            document.querySelector(target).scrollIntoView({behavior:'smooth'});
-            document.getElementById('mainNav').classList.remove('active');
-          }
-        });
-      });
+    const STORAGE_KEY = 'ama-chat-v3';
+    const messagesEl = document.getElementById('messages');
+    const inputMsg = document.getElementById('inputMsg');
+    const btnSend = document.getElementById('btnSend');
+    const nickInput = document.getElementById('nick');
+    const btnSet = document.getElementById('btnSet');
+    const fileInput = document.getElementById('fileInput');
+    let nick = localStorage.getItem('nick') || 'مهمان';
+    let messages = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
 
-      // Scroll to top
-      const scrollTopBtn=document.getElementById('scrollTopBtn');
-      window.addEventListener('scroll',()=>{
-        window.scrollY>300?scrollTopBtn.classList.add('show'):scrollTopBtn.classList.remove('show');
-      });
-      scrollTopBtn.addEventListener('click',()=>window.scrollTo({top:0,behavior:'smooth'}));
+    function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(messages)); }
+    function iconForFile(name){
+      const ext = name.split('.').pop().toLowerCase();
+      if(['png','jpg','jpeg','gif','webp','svg'].includes(ext)) return '🖼️';
+      if(['mp4','mov','avi','mkv'].includes(ext)) return '🎞️';
+      if(['mp3','wav','ogg'].includes(ext)) return '🎵';
+      if(['pdf'].includes(ext)) return '📄';
+      if(['zip','rar','7z'].includes(ext)) return '📦';
+      if(['doc','docx'].includes(ext)) return '📝';
+      if(['xls','xlsx','csv'].includes(ext)) return '📊';
+      if(['ppt','pptx'].includes(ext)) return '📽️';
+      return '📁';
+    }
 
-      // Fade-in animation
-      const observer=new IntersectionObserver(entries=>{
-        entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('show');});
+    function render(){
+      messagesEl.innerHTML='';
+      messages.forEach(m=>{
+        const div=document.createElement('div');
+        div.className='msg '+(m.nick===nick?'me':'other');
+        const who=document.createElement('div');
+        who.className='who';
+        who.textContent=m.nick+' • '+new Date(m.ts).toLocaleString();
+        div.appendChild(who);
+        if(m.type==='text'){
+          const body=document.createElement('div');
+          body.textContent=m.msg;
+          div.appendChild(body);
+        } else if(m.type==='file'){
+          const link=document.createElement('a');
+          link.href=m.data;
+          link.download=m.name;
+          link.className='file-icon';
+          link.innerHTML=iconForFile(m.name)+' '+m.name;
+          div.appendChild(link);
+        }
+        messagesEl.appendChild(div);
       });
-      document.querySelectorAll('.fade-in').forEach(el=>observer.observe(el));
+      messagesEl.scrollTop=messagesEl.scrollHeight;
+    }
 
-      // Typewriter effect
-      const el=document.getElementById('typewriter');
-      const text=el.textContent.trim();
-      el.textContent='';
-      let i=0;
-      (function type(){
-        if(i<=text.length){el.textContent=text.slice(0,i);i++;setTimeout(type,24);}
-      })();
+    function sendMessage(obj){
+      messages.push(obj);
+      save();
+      render();
+    }
 
-      // Hamburger toggle
-      const menuToggle=document.getElementById('menuToggle');
-      const mainNav=document.getElementById('mainNav');
-      menuToggle.addEventListener('click',()=>{
-        mainNav.classList.toggle('active');
-      });
-    });
+    btnSend.onclick=()=>{
+      const txt=inputMsg.value.trim();
+      if(!txt) return;
+      sendMessage({type:'text',nick,msg:txt,ts:Date.now()});
+      inputMsg.value='';
+    };
+
+    fileInput.onchange=e=>{
+      const files=e.target.files;
+      for(const f of files){
+        const reader=new FileReader();
+        reader.onload=()=>sendMessage({type:'file',nick,name:f.name,data:reader.result,ts:Date.now()});
+        reader.readAsDataURL(f);
+      }
+      fileInput.value='';
+    };
+
+    btnSet.onclick=()=>{
+      const n=nickInput.value.trim();
+      if(!n) return alert('نام را وارد کنید');
+      nick=n;
+      localStorage.setItem('nick',nick);
+      render();
+    };
+
+    render();
+    nickInput.value=nick;
+
+    // --- ثبت Service Worker برای نصب ---
+    if('serviceWorker' in navigator){
+      navigator.serviceWorker.register('service-worker.js');
+    }
   </script>
 </body>
 </html>
