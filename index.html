@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سامانه مدیریت نمرات پیشرفته</title>
+<link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" type="text/css" />
+<style>
+body { margin:0; font-family:'Vazirmatn', sans-serif; background:#f4f6fb; color:#222; }
+.container { max-width:1200px; margin:30px auto; padding:20px; }
+.header { background:linear-gradient(135deg,#4f46e5,#7c3aed); color:#fff; padding:18px; border-radius:14px; text-align:center; font-size:20px; font-weight:700; }
+.card { background:#fff; border-radius:14px; padding:18px; margin-top:18px; box-shadow:0 10px 30px rgba(33,37,41,0.06); }
+input, select, button { font-family:inherit; }
+input, select { width:100%; padding:10px; border-radius:10px; border:1px solid #e6e9f2; margin:8px 0; }
+button { padding:10px 14px; border-radius:10px; border:0; background:#4f46e5; color:#fff; cursor:pointer; }
+button.ghost { background:#fff; color:#4f46e5; border:1px solid #dbe3ff; }
+.table-wrap { overflow:auto; }
+table { width:100%; border-collapse:collapse; min-width:720px; }
+th, td { padding:10px; text-align:center; border-bottom:1px solid #f0f2f7; }
+th { background:#fbfbff; font-weight:700; }
+.subject-pill { display:inline-block; background:#eef2ff; color:#4f46e5; padding:6px 10px; border-radius:999px; margin:4px; font-weight:600; }
+.actions { display:flex; gap:8px; justify-content:center; }
+.small { padding:6px 10px; border-radius:8px; font-size:14px; }
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.45); display:none; align-items:center; justify-content:center; }
+.modal .panel { background:#fff; padding:18px; border-radius:12px; max-width:520px; width:92%; }
+.close-x { float:left; cursor:pointer; color:#d33; font-weight:700; }
+.note { color:#4b5563; font-size:14px; margin-top:8px; }
+.chart-bar { height:20px; background:#4f46e5; margin:5px 0; border-radius:10px; }
+</style>
+</head>
+<body>
+<div class="container">
+<div class="header" id="title">سامانه مدیریت نمرات</div>
+
+<!-- login -->
+<div id="loginPage" class="card">
+<h3>ورود</h3>
+<div class="note">ادمین/معلم با نام کاربری+رمز؛ دانش‌آموز فقط با کد ملی</div>
+<input id="loginCode" placeholder="کدملی یا نام‌کاربری">
+<input id="loginPass" placeholder="رمز (در صورت نیاز)" type="password">
+<div style="display:flex; gap:8px; margin-top:10px;">
+<button onclick="loginUser()">ورود</button>
+<button class="ghost" onclick="showSampleCodes()">نمایش کدهای نمونه</button>
+</div>
+</div>
+
+<!-- dashboard -->
+<div id="dashboard" style="display:none">
+<div class="card header" id="userRoleTitle"></div>
+
+<div class="card">
+<div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+<div style="flex:1; min-width:220px">
+<label>کلاس:</label>
+<select id="classSelect" onchange="renderClass()"></select>
+</div>
+<div style="display:flex; gap:8px; align-items:center">
+<button onclick="printClass()">📄 چاپ کارنامه</button>
+<button class="ghost" onclick="logout()">خروج</button>
+</div>
+</div>
+</div>
+
+<div id="subjectsCard" class="card">
+<div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap">
+<div>
+<label>دروس سامانه:</label>
+<span id="subjectsList"></span>
+</div>
+<div style="display:flex; gap:8px">
+<button id="addSubjectBtn" onclick="addSubjectPrompt()">➕ افزودن درس</button>
+<button id="removeSubjectBtn" class="ghost" onclick="removeSubjectPrompt()">❌ حذف درس</button>
+</div>
+</div>
+<div class="note">وقتی درس جدید اضافه می‌شود برای همه دانش‌آموزان ستون نمره ساخته می‌شود.</div>
+</div>
+
+<div id="studentsCard" class="card">
+<div id="studentsArea"></div>
+</div>
+
+</div>
+
+<!-- chart modal -->
+<div id="chartModal" class="modal"><div class="panel"><span class="close-x" onclick="closeChart()">✖</span><h3 id="chartTitle"></h3><div id="chartArea"></div></div></div>
+
+<div id="sampleModal" class="modal"><div class="panel"><span class="close-x" onclick="hideSample()">✖</span>
+<h3>کدهای نمونه</h3>
+<div id="sampleList"></div>
+</div></div>
+
+<script>
+let classes = {
+"هفتم یک":[
+{name:"امیرمحمد الهیاری", code:"1234", scores:{}},
+{name:"مهدی صداقت", code:"123", scores:{}}
+],
+"هفتم دو":[
+{name:"محمد دشتی", code:"124", scores:{}},
+{name:"علیزاده", code:"154", scores:{}}
+],
+"هشتم یک":[
+{name:"امیرعلی آذری", code:"5678", scores:{}}
+]
+};
+let subjects = ["ریاضی","فارسی","علوم"];
+let adminUser="admin", adminPass="admin123", teacherUser="teacher", teacherPass="t123";
+let userRole="", currentStudent=null;
+
+if(localStorage.getItem('classesData')){
+ try{
+ let data = JSON.parse(localStorage.getItem('classesData'));
+ classes = data.classes||classes;
+ subjects = data.subjects||subjects;
+ }catch(e){console.warn(e);}
+}
+
+function ensureScoresForAll(){
+ for(let c in classes){ classes[c].forEach(s=>{ subjects.forEach(sub=>{ if(!(sub in s.scores)) s.scores[sub]=''; }); });
+}
+}
+ensureScoresForAll();
+function saveAll(){ localStorage.setItem('classesData', JSON.stringify({classes,subjects})); }
+
+function loginUser(){
+ const code=document.getElementById('loginCode').value.trim();
+ const pass=document.getElementById('loginPass').value.trim();
+ userRole=''; currentStudent=null;
+ if(code===adminUser && pass===adminPass) userRole='admin';
+ else if(code===teacherUser && pass===teacherPass) userRole='teacher';
+ else{
+ for(let c in classes){ let st=classes[c].find(x=>x.code===code); if(st){ userRole='student'; currentStudent={cls:c, student:st}; break; } }
+}
+ if(!userRole) return alert('ورود ناموفق');
+ document.getElementById('loginPage').style.display='none';
+ document.getElementById('dashboard').style.display='block';
+ document.getElementById('userRoleTitle').innerText = userRole==='admin'?'پنل مدیریت':userRole==='teacher'?'پنل معلم':'پنل دانش‌آموز';
+ renderUI();
+}
+
+function renderUI(){
+ renderSubjectsBar();
+ if(userRole!=='student') loadClassOptions();
+ renderClass();
+}
+function loadClassOptions(){ const sel=document.getElementById('classSelect'); sel.innerHTML=''; for(let c in classes) sel.innerHTML+=`<option>${c}</option>`; }
+function renderSubjectsBar(){ const el=document.getElementById('subjectsList'); el.innerHTML=''; subjects.forEach(s=> el.innerHTML+=`<span class="subject-pill">${s}</span>`); }
+
+function renderClass(){
+ if(userRole==='student') return showStudentBoard();
+ const cls=document.getElementById('classSelect').value;
+ let html=`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><h4>${cls}</h4>`;
+ if(userRole==='admin') html+=`<div><button onclick="createClassPrompt()" class="small">➕ کلاس جدید</button><button onclick="addStudent()" class="small">➕ افزودن دانش‌آموز</button></div>`;
+ html+=`</div>`;
+ html+=`<div class='table-wrap'><table><thead><tr><th>کدملی</th><th>نام</th>`;
+ subjects.forEach(s=> html+=`<th>${s}</th>`);
+ html+=`<th>میانگین</th><th>عملیات</th></tr></thead><tbody>`;
+ classes[cls].forEach(st=>{
+ let avg=calcAvg(st.scores);
+ html+=`<tr><td><input value="${st.code}" onchange="editStudent('${cls}','${st.code}','code',this.value)"></td>`;
+ html+=`<td><input value="${st.name}" onchange="editStudent('${cls}','${st.code}','name',this.value)"></td>`;
+ subjects.forEach(sub=> html+=`<td><input value="${st.scores[sub]||''}" onchange="updateScore('${cls}','${st.code}','${sub}',this.value)"></td>`);
+ html+=`<td>${avg}</td>`;
+ html+=`<td class="actions">`;
+ html+=`<button onclick="showChart('${cls}','${st.code}')" class="small">📈</button>`;
+ if(userRole==='admin') html+=`<button onclick="deleteStudent('${cls}','${st.code}')" class="small">❌</button>`;
+ html+=`</td></tr>`;
+ });
+ html+=`</tbody></table></div>`;
+ document.getElementById('studentsArea').innerHTML=html;
+ saveAll();
+}
+
+function showStudentBoard(){ const s=currentStudent.student; let html=`<h3>${s.name} (${s.code})</h3>`; html+=`<div class="table-wrap"><table><thead><tr><th>درس</th><th>نمره</th></tr></thead><tbody>`; subjects.forEach(sub=> html+=`<tr><td>${sub}</td><td>${s.scores[sub]||'-'}</td></tr>`); html+=`</tbody></table></div>`; html+=`<div style="margin-top:12px"><button onclick="showChart(currentStudent.cls,currentStudent.student.code)">📈 نمودار پیشرفت</button></div>`; document.getElementById('studentsArea').innerHTML=html; }
+
+function updateScore(cls,code,lesson,val){ let st=classes[cls].find(x=>x.code===code); if(!st) return; st.scores[lesson]=val; renderClass(); }
+function editStudent(cls,code,field,val){ let st=classes[cls].find(x=>x.code===code); if(!st) return; if(field==='name') st.name=val; else st.code=val; renderClass(); }
+function deleteStudent(cls,code){ if(!confirm('آیا مطمئن هستید؟')) return; classes[cls]=classes[cls].filter(x=>x.code!==code); renderClass(); }
+function calcAvg(scores){ let arr=subjects.map(s=>Number(scores[s])).filter(n=>!isNaN(n)); return arr.length?(arr.reduce((a,b)=>a+b)/arr.length).toFixed(2) : '-'; }
+function printClass(){ window.print(); }
+function logout(){ location.reload(); }
+
+function addSubjectPrompt(){ if(userRole!=='admin') return alert('فقط مدیر'); let name=prompt('نام درس جدید:'); if(!name || subjects.includes(name)) return; subjects.push(name); for(let c in classes) classes[c].forEach(s=>s.scores[name]=''); renderSubjectsBar(); renderClass(); }
+function removeSubjectPrompt(){ if(userRole!=='admin') return; let name=prompt('نام درس حذف:'); if(!name || !subjects.includes(name)) return; if(!confirm('حذف برای همه دانش‌آموزان انجام شود؟')) return; subjects=subjects.filter(x=>x!==name); for(let c in classes) classes[c].forEach(s=>delete s.scores[name]); renderSubjectsBar(); renderClass(); }
+
+function createClassPrompt(){ let name=prompt('نام کلاس جدید:'); if(!name || classes[name]) return; classes[name]=[]; renderUI(); }
+function addStudent(){ if(userRole!=='admin') return alert('فقط ادمین'); let cls=prompt('کلاس:'); if(!classes[cls]) return alert('کلاس یافت نشد'); let name=prompt('نام:'); let code=prompt('کدملی:'); let obj={name,code,scores:{}}; subjects.forEach(sub=>obj.scores[sub]=''); classes[cls].push(obj); renderClass(); }
+
+function showChart(cls,code){ let s=classes[cls].find(x=>x.code===code); if(!s) return; document.getElementById('chartTitle').innerText=`${s.name} — ${s.code}`; let out=''; subjects.forEach(sub=>{ let v=Number(s.scores[sub])||0; out+=`<div>${sub}: ${v}</div><div style="width:${Math.min(v,100)}%" class="chart-bar"></div>`; }); document.getElementById('chartArea').innerHTML=out; document.getElementById('chartModal').style.display='flex'; }
+function closeChart(){ document.getElementById('chartModal').style.display='none'; }
+function showSampleCodes(){ let html='<ul>'; for(let c in classes){ classes[c].forEach(s=> html+=`<li>${c}: ${s.name} — ${s.code}</li>`); } html+='</ul>'; html+=`<div style="margin-top:8px"><small>Admin: ${adminUser}/${adminPass} — Teacher: ${teacherUser}/${teacherPass}</small></div>`; document.getElementById('sampleList').innerHTML=html; document.getElementById('sampleModal').style.display='flex'; }
+function hideSample(){ document.getElementById('sampleModal').style.display='none'; }
+window.addEventListener('beforeunload', saveAll);
+</script>
+
+<script src="app.js"></script>
+</div>
+</body>
+</html>
