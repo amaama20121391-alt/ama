@@ -5,78 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>سامانه مدیریت نمرات پیشرفته</title>
 
-<!-- فونت وزیر -->
 <link href="https://cdn.jsdelivr.net/gh/rastikerdar/vazir-font@v30.1.0/dist/font-face.css" rel="stylesheet" />
 
 <style>
 body {
-    margin:0; font-family:'Vazirmatn', sans-serif;
-    background:#f4f6fb; color:#222;
+    margin:0; 
+    /* اعمال اجباری فونت وزیرمتن */
+    font-family:'Vazirmatn', sans-serif !important;    
+    background:#f4f6fb; 
+    color:#222;
 }
 .container {
-    max-width:1200px; margin:30px auto; padding:20px;
+    max-width:1200px; 
+    margin:30px auto; 
+    padding:20px;
 }
 .header {
     background:linear-gradient(135deg,#4f46e5,#7c3aed);
-    color:#fff; padding:18px; border-radius:14px;
-    text-align:center; font-size:20px; font-weight:700;
+    color:#fff; 
+    padding:18px; 
+    border-radius:14px;
+    text-align:center; 
+    font-size:20px; 
+    font-weight:700;
 }
 .card {
-    background:#fff; border-radius:14px; padding:18px;
-    margin-top:18px; box-shadow:0 10px 30px rgba(33,37,41,0.06);
-}
-input, select, button {
-    font-family:inherit;
-}
-input, select {
-    width:100%; padding:10px; border-radius:10px;
-    border:1px solid #e6e9f2; margin:8px 0;
-}
-button {
-    padding:10px 14px; border-radius:10px; border:0;
-    background:#4f46e5; color:#fff; cursor:pointer;
-}
-button.ghost {
-    background:#fff; color:#4f46e5;
-    border:1px solid #dbe3ff;
-}
-.table-wrap { overflow:auto; }
-table {
-    width:100%; border-collapse:collapse; min-width:720px;
-}
-th, td {
-    padding:10px; text-align:center;
-    border-bottom:1px solid #f0f2f7;
-}
-th { background:#fbfbff; font-weight:700; }
-.subject-pill {
-    display:inline-block; background:#eef2ff; color:#4f46e5;
-    padding:6px 10px; border-radius:999px;
-    margin:4px; font-weight:600;
-}
-.actions { display:flex; gap:8px; justify-content:center; }
-.small {
-    padding:6px 10px; border-radius:8px; font-size:14px;
-}
-.modal {
-    position:fixed; inset:0; background:rgba(0,0,0,.45);
-    display:none; align-items:center; justify-content:center;
-}
-.modal .panel {
-    background:#fff; padding:18px; border-radius:12px;
-    max-width:520px; width:92%;
-}
-.close-x {
-    float:left; cursor:pointer; color:#d33; font-weight:700;
-}
-.note {
-    color:#4b5563; font-size:14px; margin-top:8px;
-}
-.chart-bar {
-    height:20px; background:#4f46e5;
-    margin:5px 0; border-radius:10px;
+    background:#fff; 
+    border-radius:14px; 
+    padding:18px;
+    margin-top:18px; 
+    box-shadow:0 10px 30px rgba(33,37,41,0.06);
 }
 
+/* اعمال فونت روی فیلدها */
+input, select, button, textarea {    
+    font-family:'Vazirmatn', sans-serif !important; 
+}
+input, select {
+    width:100%; 
+    padding:10px; 
+    border-radius:10px;
+    border:1px solid #e6e9f2; 
+    margin:8px 0;
+}
+button {
+    padding:10px 14px; 
+    border-radius:10px; 
+    border:0;
+    background:#4f46e5; 
+    color:#fff; 
+    cursor:pointer;
+}
+button.ghost {
+    background:#fff; 
+    color:#4f46e5;
+    border:1px solid #dbe3ff;
+}
+.table-wrap { 
+    overflow:auto; 
+}
+table {
+    width:100%; 
+    border-collapse:collapse; 
+    min-width:720px;
+}
+th, td {
+    padding:10px; 
+    text-align:center;
+    border-bottom:1px solid #f0f2f7;
+}
+th { 
+    background:#fbfbff; 
+    font-weight:700; 
+}
+.subject-pill {
+    display:inline-block; 
+    background:#eef2ff; 
+    color:#4f46e5;
+    padding:6px 10px; 
+    border-radius:999px;
+    margin:4px; 
+    font-weight:600;
+}
+.actions { 
+    display:flex; 
+    gap:8px; 
+    justify-content:center; 
+}
+.small {
+    padding:6px 10px; 
+    border-radius:8px; 
+    font-size:14px;
+}
+.modal {
+    position:fixed; 
+    inset:0; 
+    background:rgba(0,0,0,.45);
+    display:none; 
+    align-items:center; 
+    justify-content:center;
+}
+.modal .panel {
+    background:#fff; 
+    padding:18px; 
+    border-radius:12px;
+    max-width:520px; 
+    width:92%;
+}
+.close-x {
+    float:left; 
+    cursor:pointer; 
+    color:#d33; 
+    font-weight:700;
+}
+.note {
+    color:#4b5563; 
+    font-size:14px; 
+    margin-top:8px;
+}
+.chart-bar {
+    height:20px; 
+    background:#4f46e5;
+    margin:5px 0; 
+    border-radius:10px;
+}
 /* دکمه ذخیره نمرات */
 .save-btn {
     background:#22c55e;
@@ -99,284 +151,322 @@ th { background:#fbfbff; font-weight:700; }
 <body>
 
 <div class="container">
+    <div class="header" id="title">سامانه مدیریت نمرات</div>
 
-<div class="header" id="title">سامانه مدیریت نمرات</div>
-
-<!-- صفحه ورود -->
-<div id="loginPage" class="card">
-<h3>ورود</h3>
-<div class="note">ادمین/معلم با نام کاربری؛ دانش‌آموز با کد ملی</div>
-<input id="loginCode" placeholder="کدملی یا نام‌کاربری">
-<input id="loginPass" placeholder="رمز (در صورت نیاز)" type="password">
-<div style="display:flex; gap:8px; margin-top:10px;">
-<button onclick="loginUser()">ورود</button>
-<button class="ghost" onclick="showSampleCodes()">نمایش کدهای نمونه</button>
-</div>
-</div>
-
-<!-- داشبورد -->
-<div id="dashboard" style="display:none">
-<div class="card header" id="userRoleTitle"></div>
-
-<div class="card">
-<div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
-<div style="flex:1; min-width:220px">
-<label>کلاس:</label>
-<select id="classSelect" onchange="renderClass()"></select>
-</div>
-<div style="display:flex; gap:8px; align-items:center">
-<button onclick="printClass()">📄 چاپ کارنامه</button>
-<button class="ghost" onclick="logout()">خروج</button>
-</div>
-</div>
-</div>
-
-<div id="subjectsCard" class="card">
-<div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
-<div>
-<label>دروس:</label>
-<span id="subjectsList"></span>
-</div>
-<div style="display:flex; gap:8px">
-<button id="addSubjectBtn" onclick="addSubjectPrompt()">➕ افزودن درس</button>
-<button id="removeSubjectBtn" class="ghost" onclick="removeSubjectPrompt()">❌ حذف درس</button>
-</div>
-</div>
-</div>
-
-<div id="studentsCard" class="card">
-<div id="studentsArea"></div>
-</div>
-
-</div>
-
-<!-- مودال نمودار -->
-<div id="chartModal" class="modal">
-<div class="panel">
-<span class="close-x" onclick="closeChart()">✖</span>
-<h3 id="chartTitle"></h3>
-<div id="chartArea"></div>
-</div>
-</div>
-
-<!-- مودال نمونه -->
-<div id="sampleModal" class="modal">
-<div class="panel">
-<span class="close-x" onclick="hideSample()">✖</span>
-<h3>کدهای نمونه</h3>
-<div id="sampleList"></div>
-</div>
-</div>
-
-<script>
-/* دیتای کلاس‌ها */
-let classes = {
-"هفتم یک":[
-{name:"امیرمحمد الهیاری", code:"1234", scores:{}},
-{name:"مهدی صداقت", code:"123", scores:{}}
-],
-"هفتم دو":[
-{name:"محمد دشتی", code:"124", scores:{}},
-{name:"علیزاده", code:"154", scores:{}}
-],
-"هشتم یک":[
-{name:"امیرعلی آذری", code:"5678", scores:{}}
-]
-};
-
-let subjects = ["ریاضی","فارسی","علوم"];
-
-let adminUser="admin", adminPass="admin123";
-let teacherUser="teacher", teacherPass="t123";
-
-let userRole="", currentStudent=null;
-
-/* بازیابی از LocalStorage */
-if(localStorage.getItem('classesData')){
-   const data = JSON.parse(localStorage.getItem('classesData'));
-   classes = data.classes || classes;
-   subjects = data.subjects || subjects;
-}
-
-/* اضافه کردن نمره برای درس‌های جدید */
-function ensureScores(){
-    for(let c in classes){
-        classes[c].forEach(st=>{
-            subjects.forEach(s=>{
-                if(!(s in st.scores)) st.scores[s] = "";
-            });
-        });
-    }
-}
-ensureScores();
-
-function saveAll(){
-    localStorage.setItem("classesData", JSON.stringify({classes,subjects}));
-}
-
-/* ورود */
-function loginUser(){
-    const code = loginCode.value.trim();
-    const pass = loginPass.value.trim();
-    userRole = "";
-
-    if(code===adminUser && pass===adminPass) userRole="admin";
-    else if(code===teacherUser && pass===teacherPass) userRole="teacher";
-    else{
-        for(let c in classes){
-            let st = classes[c].find(s=>s.code===code);
-            if(st){ userRole="student"; currentStudent={cls:c, student:st}; break; }
-        }
-    }
-
-    if(!userRole) return alert("ورود ناموفق");
-
-    loginPage.style.display="none";
-    dashboard.style.display="block";
-    userRoleTitle.innerText = userRole==="admin" ? "پنل مدیریت" :
-                              userRole==="teacher" ? "پنل معلم" :
-                              "پنل دانش‌آموز";
-
-    renderUI();
-}
-
-function renderUI(){
-    renderSubjects();
-    if(userRole!=="student") loadClassOptions();
-    renderClass();
-}
-
-function renderSubjects(){
-    subjectsList.innerHTML="";
-    subjects.forEach(s=>{
-        subjectsList.innerHTML += `<span class="subject-pill">${s}</span>`;
-    });
-}
-
-function loadClassOptions(){
-    classSelect.innerHTML="";
-    for(let c in classes) classSelect.innerHTML += `<option>${c}</option>`;
-}
-
-function renderClass(){
-    if(userRole==="student") return showStudent();
-
-    const cls = classSelect.value;
-    let html = `<h3>${cls}</h3>`;
-
-    html += `<div class="table-wrap"><table><thead><tr>
-    <th>کدملی</th><th>نام</th>`;
-
-    subjects.forEach(s=> html += `<th>${s}</th>`);
-    html += `<th>میانگین</th><th>عملیات</th></tr></thead><tbody>`;
-
-    classes[cls].forEach(st=>{
-        let avg = calcAvg(st.scores);
-        html += `<tr>
-        <td><input value="${st.code}" onchange="editStudent('${cls}','${st.code}','code',this.value)"></td>
-        <td><input value="${st.name}" onchange="editStudent('${cls}','${st.code}','name',this.value)"></td>
-        `;
-
-        subjects.forEach(sub=>{
-            html += `<td><input value="${st.scores[sub]||""}" onchange="updateScore('${cls}','${st.code}','${sub}',this.value)"></td>`;
-        });
-
-        html += `<td>${avg}</td>
-        <td class="actions">
-        <button class="small" onclick="showChart('${cls}','${st.code}')">📈</button>
-        </td>
-        </tr>`;
-    });
-
-    html += `</tbody></table></div>
-
-    <div style="text-align:center; margin-top:15px;">
-    <button class="save-btn" onclick="saveAllScores()">💾 ذخیره نمرات</button>
+    <div id="loginPage" class="card">
+        <h3>ورود</h3>
+        <div class="note">ادمین/معلم با نام کاربری؛ دانش‌آموز با کد ملی</div>
+        <input id="loginCode" placeholder="کدملی یا نام‌کاربری">
+        <input id="loginPass" placeholder="رمز (در صورت نیاز)" type="password">
+        <div style="display:flex; gap:8px; margin-top:10px;">
+            <button onclick="loginUser()">ورود</button>
+            <button class="ghost" onclick="showSampleCodes()">نمایش کدهای نمونه</button>
+        </div>
     </div>
-    `;
 
-    studentsArea.innerHTML = html;
-}
+    <div id="dashboard" style="display:none">
+        <div class="card header" id="userRoleTitle"></div>
+        
+        <div class="card">
+            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center">
+                <div style="flex:1; min-width:220px">
+                    <label>کلاس:</label>
+                    <select id="classSelect" onchange="renderClass()"></select>
+                </div>
+                <div style="display:flex; gap:8px; align-items:center">
+                    <button onclick="printClass()">📄 چاپ کارنامه</button>
+                    <button class="ghost" onclick="logout()">خروج</button>
+                </div>
+            </div>
+        </div>
 
-function saveAllScores(){
-    saveAll();
-    alert("✔ نمرات با موفقیت ذخیره شد.");
-}
+        <div id="subjectsCard" class="card">
+            <div style="display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap">
+                <div>
+                    <label>دروس:</label>
+                    <span id="subjectsList"></span>
+                </div>
+                <div style="display:flex; gap:8px">
+                    <button id="addSubjectBtn" onclick="alert('این قابلیت نیاز به پیاده‌سازی دارد.')">➕ افزودن درس</button>
+                    <button id="removeSubjectBtn" class="ghost" onclick="alert('این قابلیت نیاز به پیاده‌سازی دارد.')">❌ حذف درس</button>
+                </div>
+            </div>
+        </div>
 
-function updateScore(cls, code, sub, val){
-    let st = classes[cls].find(x=>x.code===code);
-    if(!st) return;
-    st.scores[sub] = val;
-    saveAll();
-}
+        <div id="studentsCard" class="card">
+            <div id="studentsArea"></div>
+        </div>
+    </div>
 
-function editStudent(cls, oldCode, field, val){
-    let st = classes[cls].find(x=>x.code===oldCode);
-    if(!st) return;
-    st[field] = val;
-    saveAll();
-}
+    <div id="chartModal" class="modal">
+        <div class="panel">
+            <span class="close-x" onclick="closeChart()">✖</span>
+            <h3 id="chartTitle"></h3>
+            <div id="chartArea"></div>
+        </div>
+    </div>
 
-function calcAvg(scores){
-    let arr = subjects.map(s=>Number(scores[s])).filter(n=>!isNaN(n));
-    return arr.length ? (arr.reduce((a,b)=>a+b)/arr.length).toFixed(2) : "-";
-}
+    <div id="sampleModal" class="modal">
+        <div class="panel">
+            <span class="close-x" onclick="hideSample()">✖</span>
+            <h3>کدهای نمونه</h3>
+            <div id="sampleList"></div>
+        </div>
+    </div>
 
-function showStudent(){
-    let s = currentStudent.student;
-    let html = `<h3>${s.name} (${s.code})</h3>`;
+    <script>
+        // آدرس فایل PHP در سرور شما برای ذخیره نمرات
+        // *** حتماً این آدرس را با سرور واقعی خود جایگزین کنید ***
+        const PHP_ENDPOINT = 'http://localhost/save_score.php'; 
+        
+        /* دیتای کلاس‌ها */
+        let classes = {
+            "هفتم یک": [
+                {name:"امیرمحمد الهیاری", code:"1234", scores:{}},
+                {name:"مهدی صداقت", code:"123", scores:{}}
+            ],
+            "هفتم دو": [
+                {name:"محمد دشتی", code:"124", scores:{}},
+                {name:"علیزاده", code:"154", scores:{}}
+            ],
+            "هشتم یک": [
+                {name:"امیرعلی آذری", code:"5678", scores:{}}
+            ]
+        };
+        let subjects = ["ریاضی","فارسی","علوم"];
+        let adminUser="admin", adminPass="admin123";
+        let teacherUser="teacher", teacherPass="t123";
+        
+        let userRole="", currentStudent=null;
 
-    html += `<div class="table-wrap"><table><thead><tr><th>درس</th><th>نمره</th></tr></thead><tbody>`;
-    subjects.forEach(sub=>{
-        html += `<tr><td>${sub}</td><td>${s.scores[sub]||"-"}</td></tr>`;
-    });
-    html += `</tbody></table></div>`;
+        /* بازیابی از LocalStorage */
+        if(localStorage.getItem('classesData')){   
+            const data = JSON.parse(localStorage.getItem('classesData'));   
+            classes = data.classes || classes;
+            subjects = data.subjects || subjects;
+        }
 
-    html += `<button style="margin-top:12px;" onclick="showChart(currentStudent.cls,currentStudent.student.code)">📈 نمودار پیشرفت</button>`;
+        /* اضافه کردن نمره برای درس‌های جدید */
+        function ensureScores(){    
+            for(let c in classes){        
+                classes[c].forEach(st=>{            
+                    subjects.forEach(s=>{                
+                        if(!(s in st.scores)) st.scores[s] = "";            
+                    });        
+                });    
+            }
+        }
+        ensureScores();
 
-    studentsArea.innerHTML = html;
-}
+        function saveAll(){    
+            localStorage.setItem("classesData", JSON.stringify({classes,subjects}));
+        }
 
-function showChart(cls, code){
-    let s = classes[cls].find(st=>st.code===code);
-    chartTitle.innerText = `${s.name} — ${s.code}`;
-    chartArea.innerHTML = "";
+        /* توابع PHP/Server-Side (نیاز به پیاده سازی سمت سرور) */
+        
+        // *** تابع شبیه‌سازی دریافت داده از سرور در هنگام ورود ***
+        // در یک سیستم واقعی، اینجا باید یک درخواست FETCH دیگر برای گرفتن آخرین نمرات از سرور بزنید.
+        function fetchScoresFromServer(userCode){
+            // این تابع فعلاً فقط دیتای محلی را برمی‌گرداند
+            console.log(`(شبیه‌سازی) درخواست برای دریافت نمرات جدید از سرور...`);
+            // اگر از سرور استفاده می‌کردید، پاسخ سرور را در متغیر classes قرار می‌دادید
+        }
 
-    subjects.forEach(sub=>{
-        let v = Number(s.scores[sub]) || 0;
-        chartArea.innerHTML += `<div>${sub}: ${v}</div>
-        <div style="width:${Math.min(v,100)}%;" class="chart-bar"></div>`;
-    });
 
-    chartModal.style.display="flex";
-}
-function closeChart(){ chartModal.style.display="none"; }
+        /* ورود */
+        function loginUser(){
+            const code = loginCode.value.trim();
+            const pass = loginPass.value.trim();
+            userRole = "";
 
-function printClass(){ window.print(); }
-function logout(){ location.reload(); }
+            if(code===adminUser && pass===adminPass) userRole="admin";    
+            else if(code===teacherUser && pass===teacherPass) userRole="teacher";    
+            else{        
+                for(let c in classes){            
+                    let st = classes[c].find(s=>s.code===code);            
+                    if(st){ userRole="student"; currentStudent={cls:c, student:st}; break; }        
+                }    
+            }
 
-/* مودال نمونه */
-function showSampleCodes(){
-    let html = "<ul>";
-    for(let c in classes){
-        classes[c].forEach(st=>{
-            html += `<li>${c}: ${st.name} — ${st.code}</li>`;
-        });
-    }
-    html += "</ul>";
+            if(!userRole) return alert("ورود ناموفق");
+            
+            // در اینجا باید تابع دریافت نمرات از سرور را فراخوانی کنید
+            fetchScoresFromServer(code); 
 
-    html += `<div style="margin-top:12px">
-    <b>ادمین:</b> admin / admin123<br>
-    <b>معلم:</b> teacher / t123
-    </div>`;
+            loginPage.style.display="none";    
+            dashboard.style.display="block";    
+            userRoleTitle.innerText = userRole==="admin" ? "پنل مدیریت" :                              userRole==="teacher" ? "پنل معلم" :                              "پنل دانش‌آموز";
 
-    sampleList.innerHTML = html;
-    sampleModal.style.display="flex";
-}
-function hideSample(){ sampleModal.style.display="none"; }
+            renderUI();
+        }
 
-</script>
+        function renderUI(){    
+            renderSubjects();    
+            if(userRole!=="student") loadClassOptions();    
+            renderClass();
+        }
 
+        function renderSubjects(){    
+            subjectsList.innerHTML="";    
+            subjects.forEach(s=>{        
+                subjectsList.innerHTML += `<span class="subject-pill">${s}</span>`;    
+            });
+        }
+
+        function loadClassOptions(){    
+            classSelect.innerHTML="";    
+            for(let c in classes) classSelect.innerHTML += `<option>${c}</option>`;
+        }
+
+        function renderClass(){    
+            if(userRole==="student") return showStudent();
+
+            const cls = classSelect.value;    
+            let html = `<h3>${cls}</h3>`;
+
+            html += `<div class="table-wrap"><table><thead><tr>    
+                <th>کدملی</th><th>نام</th>`;
+            subjects.forEach(s=> html += `<th>${s}</th>`);    
+            html += `<th>میانگین</th><th>عملیات</th></tr></thead><tbody>`;
+
+            classes[cls].forEach(st=>{        
+                let avg = calcAvg(st.scores);        
+                html += `<tr>        
+                    <td><input value="${st.code}" onchange="editStudent('${cls}','${st.code}','code',this.value)"></td>        
+                    <td><input value="${st.name}" onchange="editStudent('${cls}','${st.code}','name',this.value)"></td>        
+                    `;
+                subjects.forEach(sub=>{            
+                    // فراخوانی تابع به‌روزرسانی نمره
+                    html += `<td><input value="${st.scores[sub]||""}" onchange="updateScore('${cls}','${st.code}','${sub}',this.value)"></td>`;        
+                });
+
+                html += `<td>${avg}</td>        
+                    <td class="actions">        
+                        <button class="small" onclick="showChart('${cls}','${st.code}')">📈</button>        
+                    </td>        
+                    </tr>`;    
+            });
+
+            html += `</tbody></table></div>
+            <div style="text-align:center; margin-top:15px;">    
+                <button class="save-btn" onclick="saveAllScores()">💾 ذخیره نمرات محلی (اختیاری)</button>
+            </div>    
+            `;
+            studentsArea.innerHTML = html;
+        }
+
+        function saveAllScores(){
+            saveAll();
+            alert("✔ نمرات با موفقیت به صورت محلی ذخیره شد. (این ذخیره محلی است)");
+        }
+        
+        // **تابع به‌روزرسانی نمره برای ارسال به سرور**
+        function updateScore(cls, code, sub, val){
+            let st = classes[cls].find(x=>x.code===code);
+            if(!st) return;
+            
+            // 1. به‌روزرسانی نمره در دیتای محلی (برای نمایش فوری و جلوگیری از تأخیر)
+            st.scores[sub] = val; 
+            saveAll(); 
+            
+            const payload = {
+                class_name: cls,
+                student_code: code,
+                subject: sub,
+                new_score: val
+            };
+            
+            // 2. ارسال درخواست FETCH به سرور PHP
+            fetch(PHP_ENDPOINT, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json' 
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`خطای HTTP: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log("پاسخ سرور:", data);
+                if(data.status === 'success'){
+                    //alert("✔ نمره با موفقیت در سرور ذخیره شد."); // نمایش پیام پس از دریافت پاسخ
+                } else {
+                     alert(`❌ خطا در ذخیره سروری: ${data.message}`);
+                }
+            })
+            .catch(error => {
+                console.error("خطای ارسال نمره:", error);
+                alert("❌ خطا در اتصال به سرور! نمره فقط به صورت محلی ذخیره شد.");
+            });
+        }
+        
+        function editStudent(cls, oldCode, field, val){
+            let st = classes[cls].find(x=>x.code===oldCode);
+            if(!st) return;
+            st[field] = val;
+            saveAll(); // این تغییرات (نام و کد) هم باید به سرور ارسال شوند
+        }
+
+        function calcAvg(scores){
+            let arr = subjects.map(s=>Number(scores[s])).filter(n=>!isNaN(n) && n !== null && n !== "");
+            return arr.length ? (arr.reduce((a,b)=>a+b)/arr.length).toFixed(2) : "-";
+        }
+
+        function showStudent(){
+            let s = currentStudent.student;
+            let html = `<h3>${s.name} (${s.code})</h3>`;
+
+            html += `<div class="table-wrap"><table><thead><tr><th>درس</th><th>نمره</th></tr></thead><tbody>`;
+            subjects.forEach(sub=>{
+                html += `<tr><td>${sub}</td><td>${s.scores[sub]||"-"}</td></tr>`;
+            });
+            html += `</tbody></table></div>`;
+
+            html += `<button style="margin-top:12px;" onclick="showChart(currentStudent.cls,currentStudent.student.code)">📈 نمودار پیشرفت</button>`;
+            studentsArea.innerHTML = html;
+        }
+
+        function showChart(cls, code){
+            let s = classes[cls].find(st=>st.code===code);
+            chartTitle.innerText = `${s.name} — ${s.code}`;
+            chartArea.innerHTML = "";
+
+            subjects.forEach(sub=>{
+                let v = Number(s.scores[sub]) || 0;
+                chartArea.innerHTML += `<div>${sub}: ${v}</div>        
+                <div style="width:${Math.min(v*5,100)}%;" class="chart-bar"></div>`; // ضربدر 5 برای نمایش بهتر در 0 تا 20
+            });
+            chartModal.style.display="flex";
+        }
+        function closeChart(){ chartModal.style.display="none"; }
+
+        function printClass(){ window.print(); }
+        function logout(){ location.reload(); }
+
+        /* مودال نمونه */
+        function showSampleCodes(){
+            let html = "<ul>";
+            for(let c in classes){
+                classes[c].forEach(st=>{
+                    html += `<li>${c}: ${st.name} — ${st.code}</li>`;
+                });
+            }
+            html += "</ul>";
+
+            html += `<div style="margin-top:12px">    
+                <b>ادمین:</b> admin / admin123<br>    
+                <b>معلم:</b> teacher / t123    
+            </div>`;
+
+            sampleList.innerHTML = html;    
+            sampleModal.style.display="flex";
+        }
+        function hideSample(){ sampleModal.style.display="none"; }
+    </script>
 </div>
 </body>
 </html>
